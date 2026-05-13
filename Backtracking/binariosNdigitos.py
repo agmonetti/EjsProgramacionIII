@@ -3,10 +3,13 @@ def generar_binarios(n):
     actual = [0] * n
 
     def backtrack(pos):
+        print("Lista:", actual)
+
         print(f"pos={pos}, actual={actual}")
+
         if pos == n:
             numero = "".join(str(bit) for bit in actual)
-            print(f"  -> completo: {numero}")
+            print(f"tenemos un número completo y lo convertimos a string para guardarlo: {numero}")
             resultado.append(numero)
             return
 
@@ -23,7 +26,7 @@ def generar_binarios(n):
 
 
 if __name__ == "__main__":
-    n = 2
+    n = 3
     binarios = generar_binarios(n)
 
     # Se guarda en una lista y se imprime
