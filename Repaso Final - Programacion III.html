@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Repaso Final — Programación III</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<style>
+  :root{
+    --bg:#0f1220; --bg2:#161a2e; --card:#1b2039; --card2:#212747;
+    --ink:#e8ecf8; --muted:#9aa4c4; --line:#2c3355;
+    --accent:#6c8cff; --accent2:#8b6cff; --ok:#39d98a; --warn:#ffb454; --bad:#ff6b8a;
+    --code:#0b0e1c; --chip:#242b4d;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:linear-gradient(180deg,#0e1120,#0f1324 40%,#0d1020);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6;}
+  a{color:var(--accent);text-decoration:none}
+  .wrap{display:flex;max-width:1500px;margin:0 auto;}
+  /* Sidebar */
+  aside{position:sticky;top:0;height:100vh;width:280px;flex:0 0 280px;overflow-y:auto;
+    background:rgba(13,16,32,.85);backdrop-filter:blur(8px);border-right:1px solid var(--line);padding:22px 16px;}
+  aside h1{font-size:15px;letter-spacing:.5px;margin:0 0 4px;color:var(--ink)}
+  aside .sub{font-size:12px;color:var(--muted);margin-bottom:18px}
+  nav a{display:block;padding:8px 12px;border-radius:9px;color:var(--muted);font-size:13.5px;margin-bottom:2px;transition:.15s}
+  nav a:hover{background:var(--card);color:var(--ink)}
+  nav a.active{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:600}
+  nav .group{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#6b7398;margin:16px 8px 6px}
+  .progress-mini{font-size:11px;color:var(--muted);margin-top:6px;padding:0 12px}
+  /* Main */
+  main{flex:1;min-width:0;padding:34px 46px 120px;}
+  .hero{background:linear-gradient(120deg,#1c2450,#241b46);border:1px solid var(--line);border-radius:20px;padding:30px 34px;margin-bottom:30px;}
+  .hero h2{margin:0 0 8px;font-size:28px}
+  .hero p{margin:6px 0;color:#c9d1ee}
+  .pill{display:inline-block;background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:12px;color:var(--muted);margin:4px 6px 0 0}
+  section{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:28px 32px;margin-bottom:26px;scroll-margin-top:20px;}
+  section h2{font-size:23px;margin:0 0 4px;display:flex;align-items:center;gap:12px}
+  .uva-num{font-size:13px;font-weight:700;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;padding:4px 11px;border-radius:8px;white-space:nowrap}
+  section h3{font-size:17px;margin:26px 0 8px;color:#dfe5ff}
+  section h4{font-size:14.5px;margin:18px 0 6px;color:var(--accent);text-transform:uppercase;letter-spacing:.5px}
+  p{margin:8px 0}
+  code{background:var(--code);padding:2px 6px;border-radius:5px;font-family:"SF Mono",Menlo,Consolas,monospace;font-size:13px;color:#c8d4ff}
+  pre{background:var(--code);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow-x:auto;font-family:"SF Mono",Menlo,Consolas,monospace;font-size:13px;line-height:1.55;color:#cdd6f4}
+  pre .cm{color:#6b7398;font-style:italic}
+  table{border-collapse:collapse;width:100%;margin:14px 0;font-size:13.5px;overflow:hidden;border-radius:10px}
+  th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+  th{background:var(--card2);color:#dfe5ff;font-weight:600}
+  tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+  .katex{font-size:1.02em}
+  .katex-display{margin:14px 0 !important;padding:6px 0}
+  .key{border-left:3px solid var(--accent);background:rgba(108,140,255,.08);padding:12px 16px;border-radius:0 10px 10px 0;margin:14px 0}
+  .warn{border-left:3px solid var(--warn);background:rgba(255,180,84,.08);padding:12px 16px;border-radius:0 10px 10px 0;margin:14px 0}
+  .tip{border-left:3px solid var(--ok);background:rgba(57,217,138,.08);padding:12px 16px;border-radius:0 10px 10px 0;margin:14px 0}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:900px){.grid2{grid-template-columns:1fr}}
+  /* Reveal / exercise */
+  .ex{border:1px solid var(--line);border-radius:14px;margin:18px 0;overflow:hidden;background:var(--card2)}
+  .ex .q{padding:16px 20px;background:linear-gradient(90deg,rgba(108,140,255,.12),transparent)}
+  .ex .q .tag{display:inline-block;font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:4px}
+  .reveal-btn{cursor:pointer;user-select:none;display:inline-flex;align-items:center;gap:8px;margin:12px 20px 16px;
+    background:var(--accent);color:#fff;border:none;border-radius:9px;padding:9px 18px;font-size:13px;font-weight:600;transition:.15s}
+  .reveal-btn:hover{filter:brightness(1.12)}
+  .answer{display:none;padding:4px 20px 18px;border-top:1px dashed var(--line)}
+  .answer.show{display:block;animation:fade .25s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+  /* Flashcards quiz */
+  .flash{border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0;background:var(--card2);cursor:pointer}
+  .flash .fq{font-weight:600;color:#dfe5ff}
+  .flash .fa{display:none;margin-top:10px;color:#c9d1ee;font-size:14px}
+  .flash.open .fa{display:block}
+  .flash .hint{font-size:11px;color:var(--muted);float:right}
+  /* Checklist */
+  .check label{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:8px;cursor:pointer}
+  .check label:hover{background:var(--card2)}
+  .check input{margin-top:5px;width:16px;height:16px;accent-color:var(--ok)}
+  .check .done{color:var(--muted);text-decoration:line-through}
+  .cmp{font-size:12.5px}
+  .badge{font-size:11px;padding:2px 8px;border-radius:6px;font-weight:600}
+  .b-ok{background:rgba(57,217,138,.15);color:var(--ok)}
+  .b-warn{background:rgba(255,180,84,.15);color:var(--warn)}
+  .b-bad{background:rgba(255,107,138,.15);color:var(--bad)}
+  /* Diagramas SVG */
+  .diagram{display:block;width:100%;max-width:680px;margin:16px auto;background:var(--code);border:1px solid var(--line);border-radius:12px;padding:12px}
+  .d-node{fill:var(--card2);stroke:var(--line);stroke-width:1.5}
+  .d-max{fill:#22305e;stroke:var(--accent);stroke-width:2}
+  .d-min{fill:#3a2850;stroke:var(--accent2);stroke-width:2}
+  .d-sol{fill:rgba(57,217,138,.2);stroke:var(--ok);stroke-width:2}
+  .d-prune{fill:rgba(255,107,138,.14);stroke:var(--bad);stroke-width:1.5}
+  .d-mut{fill:#1a2036;stroke:#3a4160;stroke-width:1.5}
+  .d-edge{stroke:#7a83a8;stroke-width:1.6;fill:none}
+  .d-edge-hi{stroke:#39d98a;stroke-width:2.6;fill:none}
+  .d-edge-prune{stroke:#ff6b8a;stroke-width:1.6;fill:none;stroke-dasharray:5 4}
+  .d-t{fill:#e8ecf8;font:600 14px -apple-system,sans-serif;text-anchor:middle;dominant-baseline:central}
+  .d-t2{fill:#e8ecf8;font:600 12px -apple-system,sans-serif;text-anchor:middle;dominant-baseline:central}
+  .d-l{fill:#9aa4c4;font:11px -apple-system,sans-serif;text-anchor:middle}
+  .d-ok{fill:#39d98a;font:600 11px -apple-system,sans-serif;text-anchor:middle}
+  .d-bad{fill:#ff6b8a;font:600 11px -apple-system,sans-serif;text-anchor:middle}
+  .d-cap{fill:#c9d1ee;font:italic 12px -apple-system,sans-serif;text-anchor:middle}
+  .d-el{fill:#9aa4c4;font:10px -apple-system,sans-serif;text-anchor:middle}
+  .foot{color:var(--muted);font-size:12px;text-align:center;margin-top:40px}
+  .top-link{position:fixed;right:24px;bottom:24px;background:var(--accent);color:#fff;border-radius:50%;width:46px;height:46px;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 6px 20px rgba(0,0,0,.4);z-index:20}
+  mark{background:rgba(139,108,255,.25);color:#e8ecf8;padding:0 3px;border-radius:3px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<aside>
+  <h1>Programación III</h1>
+  <div class="sub">Repaso para el examen final</div>
+  <div class="progress-mini" id="progressMini">Checklist: 0 / 9</div>
+  <nav id="nav">
+    <div class="group">Inicio</div>
+    <a href="#inicio">Cómo usar · Formato del examen</a>
+    <a href="#tabla">Las 5 técnicas (comparativa)</a>
+    <a href="#master">Tabla maestra (tiempo y espacio)</a>
+    <div class="group">Unidades 1–5 (repaso)</div>
+    <a href="#uva1">UVA 1 · Complejidad</a>
+    <a href="#uva2">UVA 2 · Divide y Conquista</a>
+    <a href="#uva3">UVA 3 · Greedy</a>
+    <a href="#uva4">UVA 4 · Greedy en grafos</a>
+    <a href="#uva5">UVA 5 · Prog. Dinámica</a>
+    <div class="group">Unidades 6–8 (caen sí o sí)</div>
+    <a href="#uva6">UVA 6 · Backtracking ★</a>
+    <a href="#uva7">UVA 7 · MinMax y α-β ★</a>
+    <a href="#uva8">UVA 8 · Ramificación y Poda ★</a>
+    <div class="group">Práctica</div>
+    <a href="#simulacro">Simulacro de Final resuelto</a>
+    <a href="#parcial">Parcial 8-Nov resuelto</a>
+    <a href="#quiz">Autoevaluación (30 preguntas)</a>
+    <a href="#diagnostico">🔍 Identificar la técnica</a>
+    <a href="#checklist">Checklist final</a>
+  </nav>
+</aside>
+
+<main>
+  <div class="hero">
+    <h2>Guía de estudio para el Final 🎯</h2>
+    <p>Todo lo de las 8 unidades en una sola página interactiva. El examen tomó <strong>hasta UVA 5</strong>, y la profesora adelantó que habrá <strong>un ejercicio de cada unidad restante (UVA 6, 7 y 8)</strong> — por eso esas tres tienen desarrollo extra y ejercicios propios resueltos.</p>
+    <div>
+      <span class="pill">⏱ 2 horas · sin apuntes</span>
+      <span class="pill">✅ Se aprueba con 50% de cada ejercicio</span>
+      <span class="pill">🧩 4 ejercicios típicos</span>
+      <span class="pill">📐 Complejidad se pide en casi todos</span>
+    </div>
+  </div>
+
+  <!-- INICIO -->
+  <section id="inicio">
+    <h2>Cómo usar esta guía</h2>
+    <p>Cada problema sigue el mismo formato: <strong>descripción</strong> (qué resuelve), <strong>características</strong>, <strong>tipo de entrada</strong> y <strong>complejidad</strong> (con \(a,b,k\) y tipo de recurrencia), sin pseudocódigo. Hay <strong>ejercicios resueltos</strong> con botón para revelar la solución (probá resolver antes de mirar), una autoevaluación con 30 flashcards y un checklist que se guarda en tu navegador.</p>
+    <div class="warn"><strong>Ojo para el examen:</strong> el simulacro de cátedra <em>sí</em> pide escribir pseudocódigo en el Ejercicio 1 (construir el árbol del juego) y en el Ejercicio 4 (algoritmo de PD). Este material es descriptivo por tu preferencia de estudio, pero conviene que practiques escribir el algoritmo para esos dos.</div>
+    <div class="key"><strong>Estrategia de las 2 horas:</strong> arrancá por el ejercicio que más domines para asegurar el 50%. Antes de cada respuesta, identificá <em>qué técnica</em> es (juego→MinMax, optimización con cota→B&B, recorrido→DFS/BFS, tabla→PD, recurrencia→complejidad). Ese diagnóstico correcto es medio ejercicio.</div>
+    <h3>Formato real del examen (según el simulacro de cátedra)</h3>
+    <ul>
+      <li><strong>Ejercicio 1 — Juegos (UVA 7):</strong> dibujar el árbol de decisión parcial de un juego con reglas nuevas + pseudocódigo que lo construye.</li>
+      <li><strong>Ejercicio 2 — Ramificación y Poda (UVA 8):</strong> modelar como mochila 0-1 / asignación, calcular cotas y ramificar. Estimar complejidad.</li>
+      <li><strong>Ejercicio 3 — Recorrido de grafos (UVA 6):</strong> DFS/BFS, decir qué técnica es y dar la secuencia de visita.</li>
+      <li><strong>Ejercicio 4 — Programación Dinámica (UVA 5):</strong> justificar subestructura óptima, plantear recurrencia, llenar tabla, complejidad.</li>
+    </ul>
+    <p class="cmp" style="color:var(--muted)">El Parcial 8-Nov (más abajo) además pidió <strong>complejidad de una recursiva (UVA 1)</strong>, <strong>MST — Kruskal/Prim (UVA 4)</strong> y una <em>multiple choice</em> conceptual. Repasá también eso.</p>
+  </section>
+
+  <!-- TABLA COMPARATIVA -->
+  <section id="tabla">
+    <h2>Las 5 técnicas de diseño — mapa mental</h2>
+    <p>Si tenés que elegir técnica en el examen, esta tabla es tu brújula.</p>
+    <table class="cmp">
+      <tr><th>Técnica</th><th>Tipo de problema</th><th>¿Óptimo?</th><th>Complejidad típica</th><th>Clave del éxito</th></tr>
+      <tr><td><strong>Divide y Conquista</strong></td><td>Divide en subproblemas <em>independientes</em></td><td><span class="badge b-ok">Sí, exacto</span></td><td>\(O(n\log n)\)</td><td>Subproblemas balanceados</td></tr>
+      <tr><td><strong>Greedy</strong></td><td>Optimización incremental local</td><td><span class="badge b-warn">Solo si se demuestra</span></td><td>\(O(n\log n)\)</td><td>Criterio de selección correcto</td></tr>
+      <tr><td><strong>Prog. Dinámica</strong></td><td>Subproblemas <em>superpuestos</em> + subestructura óptima</td><td><span class="badge b-ok">Sí, exacto</span></td><td>\(O(n^2)\!-\!O(n^3)\)</td><td>Buena recurrencia</td></tr>
+      <tr><td><strong>Backtracking</strong></td><td>Búsqueda en espacio finito (con/sin restricciones)</td><td><span class="badge b-ok">Sí, completo</span></td><td>\(O(b^d)\) exponencial</td><td>Podas efectivas</td></tr>
+      <tr><td><strong>Ramificación y Poda</strong></td><td>Optimización (min/max)</td><td><span class="badge b-ok">Sí, exacto</span></td><td>\(O(b^d)\) peor caso</td><td>Cotas precisas y baratas</td></tr>
+    </table>
+    <div class="tip"><strong>Regla de oro para diagnosticar:</strong> ¿el problema es de <em>optimización</em> y necesito la mejor solución exacta pero es exponencial? → B&B. ¿Hay <em>dos jugadores</em>? → MinMax. ¿Necesito <em>todas</em> las soluciones o recorrer un espacio? → Backtracking. ¿Los subproblemas se <em>repiten</em>? → PD. ¿Decisión local que se puede <em>justificar</em>? → Greedy.</div>
+  </section>
+
+  <!-- TABLA MAESTRA -->
+  <section id="master">
+    <h2>📊 Tabla maestra — complejidad temporal y espacial</h2>
+    <p>Referencia rápida de todos los algoritmos de la materia, con su técnica, tiempo y <strong>espacio extra</strong> (memoria auxiliar). \(n\) = tamaño de entrada, \(a\) = aristas, \(v\)/\(P\) = monto/capacidad, \(k\) = hijos, \(d\) = profundidad.</p>
+    <table class="cmp">
+      <tr><th>Algoritmo</th><th>Técnica</th><th>Complejidad temporal</th><th>Espacio extra</th></tr>
+      <tr><td>Huffman</td><td>Greedy</td><td>\(\Theta(n\log n)\)</td><td>\(O(n)\) heap</td></tr>
+      <tr><td>Mochila fraccionaria</td><td>Greedy</td><td>\(\Theta(n\log n)\)</td><td>\(O(n)\)</td></tr>
+      <tr><td>Cambio de monedas (Greedy)</td><td>Greedy</td><td>\(\Theta(v)\)</td><td>\(O(1)\)</td></tr>
+      <tr><td>Dijkstra</td><td>Greedy</td><td>\(O(n^2)\)</td><td>\(O(n^2)\)</td></tr>
+      <tr><td>Kruskal</td><td>Greedy</td><td>\(\Theta(a\log a)\)</td><td>\(O(n+a)\)</td></tr>
+      <tr><td>Prim</td><td>Greedy</td><td>\(O(n^2)\)</td><td>\(O(n^2)\)</td></tr>
+      <tr><td>Fibonacci (PD)</td><td>PD</td><td>\(O(n)\)</td><td>\(O(n)\) → \(O(1)\)</td></tr>
+      <tr><td>Floyd-Warshall</td><td>PD</td><td>\(\Theta(n^3)\)</td><td>\(O(n^2)\)</td></tr>
+      <tr><td>Mochila 0-1</td><td>PD</td><td>\(\Theta(n\times P)\)</td><td>\(O(n\times P)\)</td></tr>
+      <tr><td>Cambio de monedas (PD)</td><td>PD</td><td>\(\Theta(n\times v)\)</td><td>\(O(n\times v)\)</td></tr>
+      <tr><td>LIS (subsec. creciente)</td><td>PD</td><td>\(O(n^2)\)</td><td>\(O(n)\)</td></tr>
+      <tr><td>LCS (subsec. común)</td><td>PD</td><td>\(\Theta(|X|\times|Y|)\)</td><td>\(O(|X|\times|Y|)\)</td></tr>
+      <tr><td>MergeSort</td><td>D&C</td><td>\(\Theta(n\log n)\)</td><td>\(O(n)\)</td></tr>
+      <tr><td>QuickSort</td><td>D&C</td><td>\(\Theta(n\log n)\) prom · \(\Theta(n^2)\) peor</td><td>\(O(\log n)\) pila</td></tr>
+      <tr><td>Búsqueda binaria</td><td>D&C</td><td>\(\Theta(\log n)\)</td><td>\(O(1)\)</td></tr>
+      <tr><td>N-Reinas</td><td>Backtracking</td><td>\(O(n^n)\)</td><td>\(O(n)\) vector</td></tr>
+      <tr><td>Suma de subconjuntos / Partición</td><td>Backtracking</td><td>\(O(2^n)\)</td><td>\(O(n)\)</td></tr>
+      <tr><td>DFS (recorrido en profundidad)</td><td>Backtracking</td><td>\(O(n^2)\) matriz · \(O(V{+}E)\) lista</td><td>\(O(n)\) visitados</td></tr>
+      <tr><td>MinMax</td><td>Juegos</td><td>\(\Theta(k^n)\)</td><td>\(O(n)\) profundidad</td></tr>
+      <tr><td>Poda \(\alpha\text{-}\beta\)</td><td>Juegos</td><td>\(\Theta(k^{\,n/2})\) mejor caso</td><td>\(O(n)\)</td></tr>
+      <tr><td>Ramificación y Poda (B&B)</td><td>B&B</td><td>\(O(b^d)\) peor caso</td><td>\(O(\text{nodos vivos})\)</td></tr>
+    </table>
+    <div class="warn"><strong>Nota sobre "pseudo-polinomial":</strong> Mochila 0-1 y Cambio (PD) dependen del <em>valor</em> numérico (\(P\), \(v\)), no solo de la cantidad de ítems \(n\). Por eso su tabla puede ser enorme aunque haya pocos objetos — no son polinomiales en el sentido estricto.</div>
+  </section>
+
+  <!-- UVA 1 -->
+  <section id="uva1">
+    <h2><span class="uva-num">UVA 1</span> Complejidad Temporal</h2>
+    <p><strong>Idea central:</strong> es una forma de saber qué tan rápido es un algoritmo <strong>sin usar cronómetro</strong>. En vez de medir segundos (que dependen de tu compu y del lenguaje), contás <em>cuántas operaciones</em> hace según el tamaño de la entrada \(n\). Siempre miramos el <strong>peor caso</strong>: si aguanta ahí, aguanta en todos los demás.</p>
+
+    <h4>Jerarquía de complejidades (de mejor a peor)</h4>
+    <table>
+      <tr><th>Notación</th><th>Nombre</th><th>Ejemplo típico</th></tr>
+      <tr><td>\(O(1)\)</td><td><strong>Constante</strong></td><td>Acceso a un array, una asignación</td></tr>
+      <tr><td>\(O(\log n)\)</td><td><strong>Logarítmica</strong></td><td>Búsqueda binaria</td></tr>
+      <tr><td>\(O(n)\)</td><td><strong>Lineal</strong></td><td>Búsqueda lineal, un ciclo simple</td></tr>
+      <tr><td>\(O(n\log n)\)</td><td><strong>Linearítmica</strong> (\(n\log n\))</td><td>MergeSort, Heapsort, QuickSort promedio</td></tr>
+      <tr><td>\(O(n^2)\)</td><td><strong>Cuadrática</strong></td><td>Ciclos anidados, burbujeo, selección</td></tr>
+      <tr><td>\(O(n^3)\)</td><td><strong>Cúbica</strong></td><td>Floyd-Warshall, multiplicación de matrices clásica</td></tr>
+      <tr><td>\(O(2^n)\)</td><td><strong>Exponencial</strong></td><td>Fibonacci sin memoización, suma de subconjuntos</td></tr>
+      <tr><td>\(O(n!)\)</td><td><strong>Factorial</strong></td><td>Generar todas las permutaciones, TSP por fuerza bruta</td></tr>
+    </table>
+    <div class="key">Orden de crecimiento: \(O(1) \prec O(\log n) \prec O(n) \prec O(n\log n) \prec O(n^2) \prec O(n^3) \prec O(2^n) \prec O(n!)\). Para \(n\) grande, un algoritmo \(O(n\log n)\) le gana siempre a uno \(O(n^2)\), aunque para \(n\) chico el de constante mayor pueda parecer más rápido.</div>
+
+    <h4>Notaciones asintóticas</h4>
+    <ul>
+      <li>\(O\) — cota superior (peor caso).</li>
+      <li>\(\Omega\) — cota inferior (mejor caso).</li>
+      <li>\(\Theta\) — cota ajustada (\(O\) y \(\Omega\) coinciden).</li>
+    </ul>
+    <h4>Reglas prácticas de conteo</h4>
+    <ul>
+      <li>Secuencia de operaciones → se <strong>suman</strong> las complejidades (queda la mayor).</li>
+      <li>Condicional → costo de la condición + <strong>máximo</strong> de las dos ramas.</li>
+      <li>Ciclo → \(N\) × costo del cuerpo.</li>
+      <li>Llamada a método → \(1\) + complejidad del método.</li>
+    </ul>
+    <div class="tip"><strong>Regla rápida:</strong> cada ciclo <em>anidado</em> agrega un grado al polinomio → 1 ciclo \(O(n)\), 2 ciclos \(O(n^2)\), 3 ciclos \(O(n^3)\). Y al sumar, <strong>gana siempre el término más grande</strong> (\(O(n)+O(n^2)=O(n^2)\)); las constantes se ignoran (\(O(5n)=O(n)\)).</div>
+    <h4>Recurrencias: sustracción vs. división</h4>
+    <p>Definición formal (como en la diapositiva de cátedra): el caso base \(c\) es constante para entradas chicas, y según la relación entre \(a\) y \(b^k\) (o \(a\) y 1) se aplica una de tres fórmulas. Con \(p(n),\,f(n)\in O(n^k)\).</p>
+    <div class="grid2">
+      <div>
+        <p style="text-align:center;font-size:12px;letter-spacing:1px;color:var(--muted);margin:0">MÉTODO DE SUSTRACCIÓN — \(T(n-b)\)</p>
+        \[ T(n)=\begin{cases} c & \text{si } 0\le n\lt b\\ a\,T(n-b)+p(n) & \text{si } n\ge b\end{cases} \]
+        \[ T(n)\in\begin{cases}\Theta(n^{k}) & \text{si } a\lt 1\\ \Theta(n^{k+1}) & \text{si } a=1\\ \Theta\!\big(a^{\,n\,\mathrm{div}\,b}\big) & \text{si } a\gt 1\end{cases} \]
+      </div>
+      <div>
+        <p style="text-align:center;font-size:12px;letter-spacing:1px;color:var(--muted);margin:0">MÉTODO DE DIVISIÓN — \(T(n/b)\)</p>
+        \[ T(n)=\begin{cases} c & \text{si } 0\le n\lt b\\ a\,T(n/b)+f(n) & \text{si } n\ge b\end{cases} \]
+        \[ T(n)\in\begin{cases}\Theta(n^{k}) & \text{si } a\lt b^{k}\\ \Theta(n^{k}\log n) & \text{si } a=b^{k}\\ \Theta\!\big(n^{\log_b a}\big) & \text{si } a\gt b^{k}\end{cases} \]
+      </div>
+    </div>
+    <p>La misma información en tabla rápida:</p>
+    <table>
+      <tr><th>Tipo</th><th>Forma</th><th>Fórmula</th></tr>
+      <tr><td><strong>Sustracción</strong></td><td>\(T(n)=a\,T(n-b)+p(n)\), con \(p(n)\in O(n^k)\)</td><td>Si \(a=1 \Rightarrow \Theta(n^{k+1})\). Si \(a\gt 1 \Rightarrow \Theta(a^{\,n/b})\) (exponencial).</td></tr>
+      <tr><td><strong>División</strong></td><td>\(T(n)=a\,T(n/b)+f(n)\), con \(f(n)\in O(n^k)\)</td><td>Si \(a\lt b^k \Rightarrow \Theta(n^k)\). Si \(a=b^k \Rightarrow \Theta(n^k\log n)\). Si \(a\gt b^k \Rightarrow \Theta(n^{\log_b a})\).</td></tr>
+    </table>
+    <h4>Cómo identificar los parámetros \(a\), \(b\) y \(k\)</h4>
+    <p>Mirá <strong>una sola llamada recursiva</strong> del algoritmo y respondé tres preguntas:</p>
+    <table>
+      <tr><th>Parám.</th><th>Pregunta</th><th>Dónde mirar</th></tr>
+      <tr><td>\(a\)</td><td>¿<strong>Cuántas</strong> llamadas recursivas se hacen?</td><td>El número que multiplica a \(T\). En \(2\,T(\dots)\) → \(a=2\); si hay una sola llamada → \(a=1\).</td></tr>
+      <tr><td>\(b\)</td><td>¿<strong>Cuánto se achica</strong> el problema en cada llamada?</td><td>Si <em>resta</em> \(T(n-b)\) → es el número que se resta (sustracción). Si <em>divide</em> \(T(n/b)\) → es el divisor (división).</td></tr>
+      <tr><td>\(k\)</td><td>¿Cuál es el costo del trabajo <strong>fuera</strong> de las llamadas?</td><td>Ese trabajo es \(O(n^k)\): constante → \(k=0\); lineal (un ciclo) → \(k=1\); cuadrático (ciclos anidados) → \(k=2\).</td></tr>
+    </table>
+    <p>El <strong>tipo</strong> lo define \(b\): si el tamaño baja <em>restando</em> (\(n-b\)) es <strong>sustracción</strong>; si baja <em>dividiendo</em> (\(n/b\)) es <strong>división</strong>.</p>
+
+    <div class="ex">
+      <div class="q"><span class="tag">Ejemplo de identificación</span><br>Identificá \(a,b,k\) y resolvé: \(T(n)=3\,T(n/4)+n^2\) y \(T(n)=2\,T(n-1)+O(1)\).</div>
+      <button class="reveal-btn">Ver solución</button>
+      <div class="answer">
+        <p><strong>\(T(n)=3\,T(n/4)+n^2\):</strong> hay <strong>3</strong> llamadas → \(a=3\); el problema se <em>divide</em> por 4 → <strong>división</strong>, \(b=4\); el trabajo extra \(n^2\) es cuadrático → \(k=2\). Comparo \(a\) con \(b^k=4^2=16\): como \(a=3\lt 16 \Rightarrow \Theta(n^k)=\Theta(n^2)\).</p>
+        <p><strong>\(T(n)=2\,T(n-1)+O(1)\):</strong> hay <strong>2</strong> llamadas → \(a=2\); el problema se reduce <em>restando</em> 1 → <strong>sustracción</strong>, \(b=1\); trabajo extra constante → \(k=0\). Con sustracción y \(a=2\gt 1 \Rightarrow \Theta(a^{\,n/b})=\Theta(2^{\,n/1})=\Theta(2^n)\).</p>
+      </div>
+    </div>
+
+    <h4>Ejemplos clave (para memorizar)</h4>
+    <table>
+      <tr><th>Algoritmo</th><th>Recurrencia</th><th>\(a,b,k\)</th><th>Tipo · condición</th><th>Resultado</th></tr>
+      <tr><td>Factorial / recorrido lineal</td><td>\(T(n)=T(n-1)+O(1)\)</td><td>\(a{=}1,b{=}1,k{=}0\)</td><td>Sustracción · \(a=1\)</td><td>\(\Theta(n)\)</td></tr>
+      <tr><td>Búsqueda binaria</td><td>\(T(n)=T(n/2)+O(1)\)</td><td>\(a{=}1,b{=}2,k{=}0\)</td><td>División · \(a=b^k\) (\(1=2^0\))</td><td>\(\Theta(\log n)\)</td></tr>
+      <tr><td>MergeSort</td><td>\(T(n)=2T(n/2)+O(n)\)</td><td>\(a{=}2,b{=}2,k{=}1\)</td><td>División · \(a=b^k\) (\(2=2^1\))</td><td>\(\Theta(n\log n)\)</td></tr>
+      <tr><td>Fibonacci recursivo</td><td>\(T(n)=2T(n-1)+O(1)\)</td><td>\(a{=}2,b{=}1,k{=}0\)</td><td>Sustracción · \(a\gt 1\)</td><td>\(\Theta(2^n)\)</td></tr>
+    </table>
+
+    <div class="key"><strong>Truco de examen:</strong> primero identificá si es <em>sustracción</em> (\(n-b\)) o <em>división</em> (\(n/b\)), extraé \(a, b, k\), y aplicá la fórmula. Si hay parte no recursiva costosa (ej. imprimir todo el arreglo), sumala aparte y quedate con el máximo.</div>
+
+    <div class="ex">
+      <div class="q"><span class="tag">Ejercicio resuelto 1.1</span><br>Clasificá y resolvé: \(T(n)=T(n/2)+O(1)\), \(\;T(n)=2T(n/2)+O(n)\), \(\;T(n)=2T(n-1)+O(1)\).</div>
+      <button class="reveal-btn">Ver solución</button>
+      <div class="answer">
+        <p>\(T(n)=T(n/2)+O(1)\) → <strong>división</strong>, \(a=1,\,b=2,\,k=0\). Como \(a=1=b^0 \Rightarrow \Theta(\log n)\). (Búsqueda binaria.)</p>
+        <p>\(T(n)=2T(n/2)+O(n)\) → <strong>división</strong>, \(a=2,\,b=2,\,k=1\). \(a=b^1 \Rightarrow \Theta(n\log n)\). (MergeSort.)</p>
+        <p>\(T(n)=2T(n-1)+O(1)\) → <strong>sustracción</strong>, \(a=2\gt 1 \Rightarrow \Theta(2^n)\). (Fibonacci recursivo puro.)</p>
+      </div>
+    </div>
+
+    <div class="ex">
+      <div class="q"><span class="tag">Ejercicio resuelto 1.2 (estilo Parcial 8-Nov)</span><br>
+      <pre>metodo(conjunto[1..n], int n){
+  bool cond = calcularUnDato(conjunto)   <span class="cm">// O(n) lineal</span>
+  si (cond) { TrabajarCon(conjunto) }     <span class="cm">// O(n^2) cuadratico</span>
+  sino { metodo(conjunto, n/2) }
+}</pre>Calculá la complejidad temporal.</div>
+      <button class="reveal-btn">Ver solución</button>
+      <div class="answer">
+        <p>Cada llamada cuesta \(\text{calcularUnDato}=O(n)\) más el máximo de las dos ramas. La rama recursiva es \(\text{metodo}(n/2)\).</p>
+        <p>Recurrencia (peor caso, siempre entra por el <code>sino</code>): \(T(n)=T(n/2)+O(n)\). Es <strong>división</strong>: \(a=1,\,b=2,\,k=1\). Como \(a=1\lt b^k=2 \Rightarrow \Theta(n^k)=\Theta(n)\).</p>
+        <div class="warn">El término dominante es el trabajo <em>lineal</em> de cada nivel, no la rama cuadrática (que solo ocurre en el caso base cuando <code>cond</code> es verdadero, una sola vez). Resultado: \(\boldsymbol{\Theta(n)}\).</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- UVA 2 -->
+  <section id="uva2">
+    <h2><span class="uva-num">UVA 2</span> Divide y Conquista</h2>
+    <p>Tres pasos: <strong>Dividir</strong> (partir en subproblemas del mismo tipo), <strong>Conquistar</strong> (resolver recursivamente), <strong>Combinar</strong> (unir soluciones). Requisito clave: subproblemas <mark>independientes</mark> y de tamaño parejo (desbalancearlos degrada la complejidad).</p>
+    <div class="tip"><strong>Intuición:</strong> es como repartir una pila enorme de exámenes en dos mitades, que cada mitad la corrija otra persona (recursión), y al final juntar las notas. Funciona bien porque las mitades <em>no dependen entre sí</em>.</div>
+    <h4>Casos clásicos</h4>
+    <table>
+      <tr><th>Algoritmo</th><th>Recurrencia</th><th>Complejidad</th></tr>
+      <tr><td>Búsqueda binaria</td><td>\(T(n)=T(n/2)+O(1)\)</td><td>\(\Theta(\log n)\)</td></tr>
+      <tr><td>Palíndromo (reduce extremos)</td><td>\(T(n)=T(n-2)+O(1)\)</td><td>\(\Theta(n)\)</td></tr>
+      <tr><td>Fibonacci recursivo (ineficiente)</td><td>\(T(n)=2T(n-1)+O(1)\)</td><td>\(\Theta(2^n)\)</td></tr>
+      <tr><td><strong>MergeSort</strong></td><td>\(T(n)=2T(n/2)+O(n)\)</td><td><strong>\(\Theta(n\log n)\) siempre</strong> · estable · \(O(n)\) memoria aux.</td></tr>
+      <tr><td><strong>QuickSort</strong></td><td>Depende del pivote</td><td>Promedio \(\Theta(n\log n)\); peor caso \(\Theta(n^2)\)</td></tr>
+    </table>
+    <div class="key"><strong>MergeSort vs QuickSort:</strong> MergeSort garantiza \(n\log n\) siempre pero paga memoria auxiliar. QuickSort es <em>in-place</em> pero su peor caso (array ordenado + pivote en el extremo) es \(\Theta(n^2)\); se mitiga con pivote mediana-de-3 o al azar.</div>
+
+    <h3>Problemas clásicos desarrollados</h3>
+    <div class="ex">
+      <div class="q"><span class="tag">Clásico 2.1 — Búsqueda binaria</span><br>¿Cómo funciona y por qué es \(\Theta(\log n)\)?</div>
+      <button class="reveal-btn">Ver solución</button>
+      <div class="answer">
+        <p><strong>Qué resuelve:</strong> buscar un elemento en un arreglo <strong>ordenado</strong>. <strong>Características:</strong> se compara \(x\) con el elemento del medio; si es igual, listo; si \(x\) es menor, se sigue en la mitad izquierda; si es mayor, en la derecha. Cada paso <strong>descarta la mitad</strong> del arreglo. <strong>Entrada:</strong> un arreglo ordenado y el valor a buscar.</p>
+        <p><strong>Complejidad:</strong> recurrencia de <strong>división</strong> \(T(n)=T(n/2)+O(1)\) con \(a=1,\,b=2,\,k=0\); como \(a=b^0=1 \Rightarrow \Theta(\log n)\).</p>
+      </div>
+    </div>
+    <div class="ex">
+      <div class="q"><span class="tag">Clásico 2.2 — MergeSort</span><br>Idea, por qué \(\Theta(n\log n)\) siempre, y su costo en memoria.</div>
+      <button class="reveal-btn">Ver solución</button>
+      <div class="answer">
+        <p><strong>Dividir:</strong> partir el arreglo en dos mitades. <strong>Conquistar:</strong> ordenar cada mitad recursivamente. <strong>Combinar:</strong> <em>merge</em> de dos mitades ya ordenadas en \(O(n)\).</p>
+        <p>Recurrencia \(T(n)=2T(n/2)+O(n)\) → \(a=2,\,b=2,\,k=1,\ a=b^1 \Rightarrow \Theta(n\log n)\), <strong>sin importar el orden inicial</strong> (por eso es estable y predecible). Paga \(O(n)\) de memoria auxiliar para el merge — su desventaja frente a QuickSort in-place.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- UVA 3 -->
+  <section id="uva3">
+    <h2><span class="uva-num">UVA 3</span> Greedy (Voraz)</h2>
+    <p><strong>Idea:</strong> en cada paso agarrás lo que <em>parece</em> mejor <strong>ahora</strong> y no volvés atrás nunca (por eso es <mark>localmente óptima</mark>). Es rápido, pero <strong>no siempre da el mejor resultado global</strong>: para cada problema hay que demostrar que la estrategia realmente funciona.</p>
+    <div class="tip"><strong>Por qué "voraz":</strong> es como alguien en un bufé que siempre agarra <em>ahora</em> el plato más grande, sin fijarse si más adelante hay algo mejor. Rápido y simple, pero esa avidez no siempre lleva al mejor resultado final (por eso hay que probar que funciona en cada problema).</div>
+    <h4>Los 5 componentes de todo Greedy</h4>
+    <ol>
+      <li><strong>Candidatos</strong>: universo de decisiones posibles.</li>
+      <li><strong>Función de selección</strong>: criterio del "mejor" candidato en cada paso.</li>
+      <li><strong>Función de factibilidad</strong>: ¿el candidato mantiene la solución válida?</li>
+      <li><strong>Función solución</strong>: ¿la construcción está completa?</li>
+      <li><strong>Función objetivo</strong>: lo que se maximiza/minimiza.</li>
+    </ol>
+    <h4>Problemas clásicos</h4>
+    <table>
+      <tr><th>Problema</th><th>Criterio Greedy</th><th>¿Siempre óptimo?</th><th>Complejidad</th></tr>
+      <tr><td><strong>Huffman</strong> (compresión)</td><td>Combinar los 2 nodos de menor frecuencia (cola de prioridad)</td><td><span class="badge b-ok">Sí</span></td><td>\(\Theta(n\log n)\)</td></tr>
+      <tr><td><strong>Mochila fraccionaria</strong></td><td>Mayor relación \(v/p\) primero</td><td><span class="badge b-ok">Sí</span> (si se puede fraccionar)</td><td>\(\Theta(n\log n)\)</td></tr>
+      <tr><td><strong>Cambio de monedas</strong></td><td>Moneda de mayor denominación posible</td><td><span class="badge b-warn">Solo con ciertas denominaciones</span></td><td>\(\Theta(v)\)</td></tr>
+    </table>
+    <div class="warn"><strong>Ojo:</strong> la <strong>mochila 0-1</strong> (objetos enteros, sin fraccionar) <mark>NO</mark> se resuelve óptimamente con Greedy. Ahí van Programación Dinámica (UVA 5) o Ramificación y Poda (UVA 8).</div>
+
+    <h3>Problemas clásicos desarrollados</h3>
+    <div class="ex">
+      <div class="q"><span class="tag">Clásico 3.1 — Codificación de Huffman</span><br>Frecuencias \(A{:}5,\ B{:}2,\ C{:}1,\ D{:}1\). Construí el árbol y dá los códigos.</div>
+      <button class="reveal-btn">Ver solución</button>
+      <div class="answer">
+        <p>Criterio greedy: combinar siempre los <strong>dos nodos de menor frecuencia</strong> (cola de prioridad mínima) hasta tener un solo árbol.</p>
+        <pre>Paso 1: C(1)+D(1) → nodo CD(2)
+Paso 2: B(2)+CD(2) → nodo BCD(4)
+Paso 3: A(5)+BCD(4) → raíz(9)</pre>
+        <p>Códigos (0 = izq, 1 = der): <strong>A=0, B=10, C=110, D=111</strong>. Los más frecuentes quedan más cortos.</p>
+        <p>Longitud total \(=5\cdot1+2\cdot2+1\cdot3+1\cdot3=15\) bits. Complejidad \(\Theta(n\log n)\) por la cola de prioridad. Siempre óptimo.</p>
+      </div>
+    </div>
+    <div class="ex">
+      <div class="q"><span class="tag">Clásico 3.2 — Mochila fraccionaria</span><br>Capacidad \(W=20\). Objetos (valor, peso): \(A(60,10),\ B(100,20),\ C(120,30)\). Maximizar valor.</div>
+      <button class="reveal-btn">Ver solución</button>
+      <div class="answer">
+        <p>Ordenar por relación \(v/p\): \(A=6,\ B=5,\ C=4\). Cargar en ese orden, fraccionando el último si no entra completo.</p>
+        <pre>Tomo A completo: peso 10, valor 60, resta 10
+Tomo fracción de B: 10/20 → valor 100·(10/20)=50, resta 0
+C no entra</pre>
+        <p>Valor máximo \(=60+50=110\). Complejidad \(\Theta(n\log n)\) (por el orden). <strong>Óptimo solo porque se permite fraccionar</strong> — con la versión 0-1 este mismo criterio puede fallar (ver UVA 5 / UVA 8).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- UVA 4 -->
+  <section id="uva4">
+    <h2><span class="uva-num">UVA 4</span> Greedy sobre Grafos</h2>
+    <h3>Dijkstra — caminos mínimos desde un origen</h3>
+    <p>Grafo <strong>dirigido</strong> con pesos <strong>positivos</strong> y un origen: hallar el costo mínimo a todos los nodos. Criterio greedy: elegir el nodo pendiente de menor costo acumulado; al marcarlo, su distancia queda <strong>definitiva</strong>.</p>
+    <div class="tip"><strong>Intuición:</strong> es como una mancha de tinta que se expande desde el origen tomando siempre lo más barato primero: en cada paso "confirma" el nodo pendiente más cercano y ya no lo vuelve a tocar. Por eso un <strong>peso negativo lo rompe</strong>: podría abaratar un nodo que ya dio por cerrado.</div>
+    <div class="warn">No funciona con <strong>pesos negativos</strong> (para eso está Bellman-Ford, fuera del programa). Complejidad \(O(n^2)\) con matriz de adyacencia; \(O((V+E)\log V)\) con heap + lista de adyacencia.</div>
+    <div class="key"><strong>¿Y los caminos mínimos entre TODOS los pares?</strong> Dijkstra los da desde <em>un</em> origen (greedy). Para el mínimo entre <strong>todos los pares</strong> de nodos está <strong>Floyd-Warshall</strong> — pero es <strong>Programación Dinámica</strong> (\(\Theta(n^3)\)), así que lo tenés en <a href="#uva5">UVA 5</a>.</div>
+    <h3>Árbol de Recubrimiento Mínimo (MST) — Kruskal y Prim</h3>
+    <p>Grafo <strong>no dirigido</strong>: subgrafo conexo, acíclico, que conecta todos los vértices con el mínimo costo total. Siempre tiene \(n-1\) aristas. Puede no ser único.</p>
+    <table>
+      <tr><th></th><th>Kruskal</th><th>Prim</th></tr>
+      <tr><td>Unidad de trabajo</td><td>Aristas</td><td>Vértices</td></tr>
+      <tr><td>Estrategia</td><td>Ordena todas las aristas por costo y une componentes distintas (conjuntos disjuntos), evitando ciclos</td><td>Parte de un vértice y agrega siempre la arista más barata hacia un vértice fuera del árbol</td></tr>
+      <tr><td>Complejidad</td><td>\(\Theta(a\log a)\)</td><td>\(O(n^2)\)</td></tr>
+      <tr><td>Conviene en</td><td>Grafos <strong>dispersos</strong> (pocas aristas)</td><td>Grafos <strong>densos</strong> (muchas aristas)</td></tr>
+    </table>
+    <div class="ex">
+      <div class="q"><span class="tag">Ejercicio resuelto 4.1 (estilo Parcial 8-Nov)</span><br>"Conectar todas las ciudades A,B,C,D,E con el menor costo total, sin formar ciclos." ¿Qué algoritmo usás y cuál es su complejidad?</div>
+      <button class="reveal-btn">Ver solución</button>
+      <div class="answer">
+        <p>Es un <strong>Árbol de Recubrimiento Mínimo (MST)</strong>: "conectar todo, mínimo costo, sin ciclos" es la definición literal. Sirven <strong>Kruskal</strong> (\(\Theta(a\log a)\), mejor en grafos dispersos) o <strong>Prim</strong> (\(O(n^2)\), mejor en densos).</p>
+        <p>Método a mano con Kruskal: ordenar aristas por costo ascendente y agregarlas una por una, salteando la que forme ciclo, hasta tener \(n-1\) aristas (con 5 ciudades → 4 aristas).</p>
+      </div>
+    </div>
+
+    <div class="ex">
+      <div class="q"><span class="tag">Clásico 4.2 — Dijkstra (ejemplo)</span><br>Grafo dirigido, pesos positivos. Aristas: \(A\!\to\!B(1),\ A\!\to\!C(4),\ B\!\to\!C(2),\ B\!\to\!D(5),\ C\!\to\!D(1)\). Caminos mínimos desde \(A\).</div>
+      <button class="reveal-btn">Ver solución</button>
+      <div class="answer">
+        <pre>Inicio: dist(A)=0, resto=∞
+Elijo A(0): relajo B=1, C=4
+Elijo B(1): C=min(4, 1+2)=3, D=1+5=6
+Elijo C(3): D=min(6, 3+1)=4
+Elijo D(4): fin</pre>
+        <p>Distancias mínimas desde \(A\): <strong>\(A{=}0,\ B{=}1,\ C{=}3,\ D{=}4\)</strong>. En cada paso se fija <em>definitivamente</em> el nodo pendiente de menor costo acumulado. Complejidad \(O(n^2)\) con matriz de adyacencia.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- UVA 5 -->
+  <section id="uva5">
+    <h2><span class="uva-num">UVA 5</span> Programación Dinámica</h2>
+    <p><strong>Dos condiciones necesarias:</strong></p>
+    <ol>
+      <li><strong>Subestructura óptima</strong>: la mejor solución del problema grande se arma juntando las mejores soluciones de sus pedacitos. Si armar bien las partes no te da bien el todo, PD no sirve.</li>
+      <li><strong>Superposición de subproblemas</strong>: los mismos pedacitos aparecen una y otra vez → en vez de recalcularlos, los <mark>anotás en una tabla</mark> y los reusás.</li>
+    </ol>
+    <div class="tip"><strong>Intuición (memoización):</strong> es "anotar en una tabla" cada resultado ya calculado para no repetirlo. Fibonacci recursivo recalcula \(F(3)\) un montón de veces (por eso es \(\Theta(2^n)\)); con PD lo calculás <strong>una sola vez</strong> y lo reusás, y baja a \(O(n)\). PD = <em>divide y conquista con memoria</em>.</div>
+    <p><strong>Principio de optimalidad:</strong> para que el resultado final sea el mejor, cada paso intermedio también tiene que ser el mejor. Si podés mejorar el todo usando partes que <em>no</em> eran óptimas, entonces PD no aplica.</p>
+    <p><strong>Cómo se hace, paso a paso:</strong> (1) definir los casos base (los más chiquitos, que se saben directo); (2) escribir la recurrencia (cómo un caso se arma con los anteriores); (3) llenar la tabla de abajo hacia arriba (<em>bottom-up</em>); (4) si además querés saber <em>cuáles</em> elementos se eligieron, recorrés la tabla al revés.</p>
+    <h4>Problemas clásicos</h4>
+    <table>
+      <tr><th>Problema</th><th>Recurrencia</th><th>Complejidad</th></tr>
+      <tr><td>Fibonacci</td><td>\(F[i]=F[i-1]+F[i-2]\)</td><td>\(O(n)\) (vs \(\Theta(2^n)\) por D&C)</td></tr>
+      <tr><td>Cambio de monedas</td><td>tabla [denom][valor], mínimo de monedas</td><td>\(O(n\cdot v)\)</td></tr>
+      <tr><td><strong>Mochila 0-1</strong></td><td>\(V[i][j]=\max\big(V[i\!-\!1][j],\; v_i+V[i\!-\!1][j\!-\!p_i]\big)\) si \(p_i\le j\)</td><td>\(O(o\cdot p)\) <em>pseudo-polinomial</em></td></tr>
+      <tr><td>Subsec. creciente más larga (LIS)</td><td>\(D[i]=\max(D[i],\,D[j]+1)\) para \(j\lt i,\; x[j]\lt x[i]\)</td><td>\(\Theta(n^2)\)</td></tr>
+      <tr><td>Subsec. común más larga (LCS)</td><td>\(c[i,j]=c[i\!-\!1,j\!-\!1]+1\) si \(x_i=y_j\), sino \(\max(c[i\!-\!1,j],\,c[i,j\!-\!1])\)</td><td>\(O(m\cdot n)\)</td></tr>
+      <tr><td>Floyd-Warshall (todos-a-todos)</td><td>\(A^k[i,j]=\min\big(A^{k-1}[i,j],\;A^{k-1}[i,k]+A^{k-1}[k,j]\big)\)</td><td>\(\Theta(n^3)\)</td></tr>
+    </table>
+    <div class="key"><strong>Mochila 0-1:</strong> Greedy solo resuelve la fraccionaria. La 0-1 se resuelve óptimamente con PD (tabla \(O(o\cdot p)\), pseudo-polinomial: depende del <em>valor</em> de \(p\), no solo de \(n\)) o con B&B (UVA 8).</div>
+
+    <div class="ex">
+      <div class="q"><span class="tag">Clásico 5.2 — Cambio de monedas (PD)</span><br>Descripción, características, entrada y complejidad.</div>
+      <button class="reveal-btn">Ver solución</button>
+      <div class="answer">
+        <p><strong>Qué resuelve:</strong> dar un monto con la <strong>menor cantidad de monedas</strong>, usando un conjunto cualquiera de denominaciones. A diferencia del greedy (agarrar siempre la moneda más grande), la PD <strong>garantiza el óptimo</strong> con cualquier sistema de monedas.</p>
+        <p><strong>Cómo funciona (en criollo):</strong> armás una tabla \(c[j]\) = mínimo de monedas para el monto \(j\), desde \(0\) hasta el total. Para cada monto probás <em>todas</em> las denominaciones: "si uso esta moneda, me queda el resto \(j - D_i\), que ya resolví antes" → te quedás con la opción que menos monedas use. Recurrencia: \(c[j]=\min_i\big(c[j-D_i]+1\big)\), con \(c[0]=0\).</p>
+        <p><strong>Ejemplo:</strong> con \(\{1,3,4\}\) y monto 6, la PD da \(c[6]=2\) (\(3+3\)); el greedy daría \(4+1+1=3\). Este es justo el caso donde greedy falla y PD acierta.</p>
+        <p><strong>Entrada:</strong> las denominaciones y el monto objetivo.</p>
+        <p><strong>Complejidad:</strong> \(O(n\cdot v)\) (\(n\) denominaciones, \(v\) monto) — <em>pseudo-polinomial</em>: depende del valor del monto.</p>
+      </div>
+    </div>
+
+    <div class="ex">
+      <div class="q"><span class="tag">Clásico 5.3 — Mochila 0-1 (PD)</span><br>Descripción, características, entrada y complejidad.</div>
+      <button class="reveal-btn">Ver solución</button>
+      <div class="answer">
+        <p><strong>Qué resuelve:</strong> llenar una mochila de capacidad \(W\) eligiendo objetos <strong>enteros</strong> (cada objeto entra completo o no entra) para <strong>maximizar el valor</strong>. Ojo: acá <em>no</em> se puede fraccionar — esa es la mochila fraccionaria (greedy) de UVA 3.</p>
+        <p><strong>Cómo funciona (en criollo):</strong> vas objeto por objeto y capacidad por capacidad llenando una tabla \(V[i][j]\) = mejor valor usando los primeros \(i\) objetos con capacidad \(j\). En cada casilla decidís: <strong>¿meto el objeto \(i\) o no?</strong>, y te quedás con la opción de mayor valor.</p>
+        <p><strong>Recurrencia:</strong></p>
+        \[ V[i][j]=\begin{cases}\max\big(V[i-1][j],\; v_i+V[i-1][j-p_i]\big) & \text{si } p_i\le j\\ V[i-1][j] & \text{si no entra}\end{cases} \]
+        <p>(\(V[i-1][j]\): no lo meto; \(v_i+V[i-1][j-p_i]\): lo meto y sumo su valor sobre la capacidad que quedaba.)</p>
+        <p><strong>Entrada:</strong> los pesos \(p_i\) y valores \(v_i\) de los objetos, y la capacidad \(W\).</p>
+        <p><strong>Complejidad:</strong> \(O(o\cdot W)\) (\(o\) objetos, \(W\) capacidad) — <em>pseudo-polinomial</em>: depende del valor de \(W\), no solo de la cantidad de objetos. También se puede por B&B (UVA 8).</p>
+      </div>
+    </div>
+
+    <div class="ex">
+      <div class="q"><span class="tag">Clásico 5.4 — Floyd-Warshall</span><br>Caminos mínimos entre <strong>todos</strong> los pares de nodos. Descripción, características, entrada y complejidad.</div>
+      <button class="reveal-btn">Ver solución</button>
+      <div class="answer">
+        <p><strong>Qué resuelve:</strong> el camino más corto entre <strong>cada par</strong> de nodos de un grafo dirigido con pesos positivos, todo de una sola corrida. La diferencia con Dijkstra: Dijkstra te da las distancias desde <em>un</em> origen; Floyd te da la tabla completa <em>de todos contra todos</em>.</p>
+        <p><strong>Cómo funciona (en criollo):</strong> arrancás con la matriz de costos directos (\(0\) en la diagonal, \(\infty\) donde no hay arista). Después probás, para cada par \((i,j)\), si <strong>hacer escala en un nodo intermedio \(k\)</strong> sale más barato que ir directo. Vas habilitando de a un nodo como posible escala (\(k=1\), luego \(2\), etc.) y la tabla se va mejorando sola. Es PD porque la mejor distancia usando los primeros \(k\) nodos como escala se arma con la que ya tenías usando los primeros \(k-1\).</p>
+        <p><strong>Recurrencia:</strong></p>
+        \[ A^{k}[i,j]=\min\big(\,A^{k-1}[i,j],\; A^{k-1}[i,k]+A^{k-1}[k,j]\,\big) \]
+        <p><strong>Mini-ejemplo</strong> (3 nodos). Matriz inicial:</p>
+        <table class="cmp">
+          <tr><th></th><th>1</th><th>2</th><th>3</th></tr>
+          <tr><td>1</td><td>0</td><td>4</td><td>11</td></tr>
+          <tr><td>2</td><td>∞</td><td>0</td><td>2</td></tr>
+          <tr><td>3</td><td>∞</td><td>∞</td><td>0</td></tr>
+        </table>
+        <p>Habilitando el nodo <strong>2</strong> como escala, la casilla \(1\!\to\!3\) mejora: \(\min(11,\; \underbrace{4}_{1\to2}+\underbrace{2}_{2\to3})=6\). Ir <em>directo</em> costaba 11; <em>haciendo escala en 2</em> cuesta 6.</p>
+        <p><strong>Entrada:</strong> la matriz de costos del grafo (\(n\times n\)).</p>
+        <p><strong>Complejidad:</strong> \(\Theta(n^3)\) — tres ciclos anidados (la escala \(k\), la fila \(i\), la columna \(j\)).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ UVA 6 ============ -->
+  <section id="uva6">
+    <h2><span class="uva-num">UVA 6 ★</span> Backtracking</h2>
+    <h4>Descripción</h4>
+    <p>Vas armando la solución <strong>paso a paso</strong> (una casilla, un elemento o un nodo por vez) y probás <mark>todos</mark> los caminos. Apenas ves que por un camino ya no vas a llegar a nada válido, <strong>volvés atrás</strong> (retrocedés = <em>backtrack</em>) y probás otro. Es prueba y error, pero organizado.</p>
+    <h4>Características</h4>
+    <ul>
+      <li>Busca <strong>todas</strong> las soluciones posibles (búsqueda exhaustiva).</li>
+      <li><strong>No es eficiente:</strong> exponencial en el caso general.</li>
+      <li>El espacio de búsqueda se modela como un <strong>árbol</strong> o un <strong>grafo acíclico dirigido</strong>.</li>
+      <li>La <strong>poda</strong> son las zonas del árbol que se evitan porque no pueden dar soluciones válidas.</li>
+    </ul>
+    <h4>Complejidad general</h4>
+    <p>\(O(\#\text{hijos}^{\,\#\text{niveles}}) = O(b^d)\), exponencial en el peor caso. Las podas la hacen manejable en la práctica.</p>
+
+    <h3>Resumen de los problemas de la unidad</h3>
+    <table>
+      <tr><th>Problema</th><th>Entrada</th><th>Tipo · \(a,b,k\)</th><th>Complejidad</th></tr>
+      <tr><td>DFS (recorrido en profundidad)</td><td>Grafo \(G\), vértice inicial \(V\), conjunto de visitados</td><td>Sustracción · \(a{=}n,\,b{=}1,\,k{=}1\)</td><td>\(O(n^n)\) teórico · \(O(n^2)\) práctico</td></tr>
+      <tr><td>Suma de subconjuntos</td><td>Conjunto \(C\) de números y valor objetivo \(v\)</td><td>Sustracción · \(a{=}2,\,b{=}1,\,k{=}0\)</td><td>\(O(2^n)\)</td></tr>
+      <tr><td>N-Reinas</td><td>Tamaño \(N\) del tablero</td><td>Sustracción · \(a{=}n,\,b{=}1,\,k{=}1\)</td><td>\(O(n^n)\)</td></tr>
+      <tr><td>Partición en mitades</td><td>Conjunto de \(n\) enteros</td><td>Sustracción · \(a{=}2,\,b{=}1,\,k{=}1\)</td><td>\(O(2^n)\)</td></tr>
+    </table>
+
+    <h3>DFS — Recorrido en profundidad</h3>
+    <p><strong>Qué resuelve:</strong> recorrer todos los nodos de un grafo yendo lo más profundo posible desde el nodo actual antes de retroceder. La búsqueda comienza por un nodo, toma sus adyacentes y, a partir de uno de ellos, busca en profundidad; cuando termina con ese, sigue con el siguiente adyacente.</p>
+    <p><strong>Características:</strong> es una aplicación <strong>directa de Backtracking</strong>. Hay que <strong>llevar la cuenta de los nodos visitados</strong> para no entrar en loops en grafos cíclicos.</p>
+    <p><strong>Entrada:</strong> el grafo \(G\), el vértice de inicio \(V\) y el conjunto de visitados.</p>
+    <p><strong>Complejidad:</strong> recurrencia de <strong>sustracción</strong> con \(a=n,\,b=1,\,k=1\) → \(O(n^n)\) teórico; en la práctica, por el control de visitados no se llama \(n\) veces por nodo y tiende a \(O(n^2)\).</p>
+    <div class="warn"><strong>Grafos dirigidos (clave conceptual):</strong> DFS solo sigue <mark>aristas salientes</mark>. Si arranco en un nodo sin camino dirigido hacia el resto, esos nodos <strong>no se visitan</strong> aunque estén en el grafo. Para recorrer todo hay que iterar sobre todos los nodos y lanzar un DFS nuevo desde cada uno no visitado → esto forma un <strong>bosque de DFS</strong>, no un único árbol.</div>
+
+    <div class="grid2">
+      <div class="key"><strong>DFS (profundidad):</strong> usa <em>pila</em> (o recursión). Va lo más hondo posible antes de retroceder. Es Backtracking.</div>
+      <div class="key"><strong>BFS (amplitud):</strong> usa <em>cola</em> (FIFO). Visita por niveles/capas. Da el camino con menos aristas en grafos no ponderados.</div>
+    </div>
+
+    <div class="ex">
+      <div class="q"><span class="tag">Ejercicio resuelto 6.1 (Ejercicio 3 del simulacro)</span><br>Grafo dirigido, nodos \(\{1,2,3,4,5\}\), aristas: \(1\!\to\!2,\ 1\!\to\!3,\ 1\!\to\!5,\ 2\!\to\!3,\ 3\!\to\!5,\ 4\!\to\!3,\ 4\!\to\!5\). Dé la secuencia de DFS desde el nodo 4 (adyacentes en orden creciente) y explique la particularidad.</div>
+      <button class="reveal-btn">Ver solución</button>
+      <div class="answer">
+        <svg class="diagram" viewBox="0 0 560 340" role="img" aria-label="Grafo dirigido: DFS desde el nodo 4 visita 4, 3 y 5">
+          <defs>
+            <marker id="arwG" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#7a83a8"/></marker>
+            <marker id="arwGhi" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#39d98a"/></marker>
+          </defs>
+          <text class="d-cap" x="280" y="22">DFS desde 4 (grafo dirigido) → secuencia 4, 3, 5</text>
+          <line class="d-edge" x1="80" y1="108" x2="80" y2="222" marker-end="url(#arwG)"/>
+          <line class="d-edge" x1="106" y1="90" x2="274" y2="150" marker-end="url(#arwG)"/>
+          <line class="d-edge" x1="100" y1="100" x2="280" y2="280" marker-end="url(#arwG)"/>
+          <line class="d-edge" x1="106" y1="239" x2="274" y2="171" marker-end="url(#arwG)"/>
+          <line class="d-edge" x1="462" y1="102" x2="318" y2="278" marker-end="url(#arwG)"/>
+          <line class="d-edge-hi" x1="454" y1="91" x2="326" y2="149" marker-end="url(#arwGhi)"/>
+          <line class="d-edge-hi" x1="300" y1="188" x2="300" y2="272" marker-end="url(#arwGhi)"/>
+          <circle class="d-mut" cx="80" cy="80" r="28"/><text class="d-t" x="80" y="80" fill="#9aa4c4">1</text>
+          <circle class="d-mut" cx="80" cy="250" r="28"/><text class="d-t" x="80" y="250" fill="#9aa4c4">2</text>
+          <circle class="d-sol" cx="300" cy="160" r="28"/><text class="d-t" x="300" y="160">3</text>
+          <circle class="d-sol" cx="300" cy="300" r="28"/><text class="d-t" x="300" y="300">5</text>
+          <circle class="d-max" cx="480" cy="80" r="28"/><text class="d-t" x="480" y="80">4</text>
+          <text class="d-l" x="480" y="42">inicio</text>
+          <text class="d-ok" x="245" y="235">camino DFS</text>
+          <text class="d-l" x="80" y="320">grises: no alcanzables desde 4</text>
+        </svg>
+        <pre>DFS(4): visitar 4 → adyacentes {3,5}
+   visitar 3 → adyacentes {5}
+      visitar 5 → sin adyacentes → backtrack
+   backtrack a 4; 5 ya visitado → fin
+
+Secuencia visitada: 4, 3, 5</pre>
+        <p><strong>Particularidad:</strong> como el grafo es <strong>dirigido</strong>, desde 4 solo se llega a 3 y 5 por aristas salientes; los nodos 1 y 2 <strong>nunca se visitan</strong> porque no hay camino dirigido desde 4 hacia ellos. DFS desde un único nodo no garantiza recorrer todo el grafo dirigido. Para completar habría que relanzar DFS desde los no visitados (1, 2) → bosque de DFS.</p>
+      </div>
+    </div>
+
+    <div class="ex">
+      <div class="q"><span class="tag">Clásico 6.2 — Suma de subconjuntos</span><br>Descripción, características, entrada y complejidad · ejemplo con \(C=\{3,4,5,6\}\), \(v=9\).</div>
+      <button class="reveal-btn">Ver solución</button>
+      <div class="answer">
+        <p><strong>Qué resuelve:</strong> dado un conjunto de números \(C\) y un valor \(v\), mostrar todos los subconjuntos de \(C\) cuya suma sea \(v\).</p>
+        <p><strong>Características:</strong> se modela con un vector de 0s y 1s (o booleano) que indica, para cada elemento de \(C\), si se incorpora o no. Se poda apenas la suma parcial supera \(v\).</p>
+        <p><strong>Entrada:</strong> el conjunto \(C\) de números y el valor objetivo \(v\).</p>
+        <svg class="diagram" viewBox="0 0 720 380" role="img" aria-label="Árbol de backtracking de suma de subconjuntos">
+          <text class="d-cap" x="360" y="20">C={3,4,5,6}, v=9 · cada nivel: incluir (izq) o no (der) el elemento</text>
+          <line class="d-edge" x1="360" y1="40" x2="200" y2="120"/>
+          <line class="d-edge" x1="360" y1="40" x2="540" y2="120"/>
+          <line class="d-edge" x1="200" y1="120" x2="120" y2="205"/>
+          <line class="d-edge" x1="200" y1="120" x2="290" y2="205"/>
+          <line class="d-edge-prune" x1="120" y1="205" x2="75" y2="298"/>
+          <line class="d-edge" x1="120" y1="205" x2="175" y2="298"/>
+          <line class="d-edge" x1="290" y1="205" x2="290" y2="298"/>
+          <line class="d-edge" x1="540" y1="120" x2="540" y2="205"/>
+          <line class="d-edge" x1="540" y1="205" x2="540" y2="298"/>
+          <text class="d-el" x="270" y="80">+3</text>
+          <text class="d-el" x="455" y="80">no 3</text>
+          <text class="d-el" x="150" y="165">+4</text>
+          <text class="d-el" x="255" y="165">no 4</text>
+          <text class="d-el" x="88" y="255">+5</text>
+          <text class="d-el" x="182" y="255">no 5</text>
+          <text class="d-el" x="330" y="255">no5,+6</text>
+          <text class="d-el" x="560" y="165">+4</text>
+          <text class="d-el" x="560" y="255">+5</text>
+          <circle class="d-node" cx="360" cy="40" r="24"/><text class="d-t2" x="360" y="40">s=0</text>
+          <circle class="d-node" cx="200" cy="120" r="24"/><text class="d-t2" x="200" y="120">s=3</text>
+          <circle class="d-node" cx="540" cy="120" r="24"/><text class="d-t2" x="540" y="120">s=0</text>
+          <circle class="d-node" cx="120" cy="205" r="24"/><text class="d-t2" x="120" y="205">s=7</text>
+          <circle class="d-node" cx="290" cy="205" r="24"/><text class="d-t2" x="290" y="205">s=3</text>
+          <circle class="d-node" cx="540" cy="205" r="24"/><text class="d-t2" x="540" y="205">s=4</text>
+          <circle class="d-prune" cx="75" cy="300" r="24"/><text class="d-t2" x="75" y="300">s=12</text>
+          <circle class="d-node" cx="175" cy="300" r="24"/><text class="d-t2" x="175" y="300">s=7</text>
+          <circle class="d-sol" cx="290" cy="300" r="24"/><text class="d-t2" x="290" y="300">s=9</text>
+          <circle class="d-sol" cx="540" cy="300" r="24"/><text class="d-t2" x="540" y="300">s=9</text>
+          <text class="d-bad" x="75" y="340">✂ poda (s&gt;9)</text>
+          <text class="d-ok" x="290" y="340">✓ {3,6}</text>
+          <text class="d-ok" x="540" y="340">✓ {4,5}</text>
+        </svg>
+        <p>En el árbol de arriba, los subconjuntos que suman 9 son <strong>\(\{3,6\}\)</strong> y <strong>\(\{4,5\}\)</strong> (nodos verdes); en rojo, la rama podada al pasarse de 9.</p>
+        <p><strong>Complejidad:</strong> recurrencia de <strong>sustracción</strong> con \(a=2,\,b=1,\,k=0\) → \(O(2^n)\) (dos opciones —incluir o no— por cada uno de los \(n\) elementos). Las podas reducen el árbol real, pero el peor caso sigue siendo exponencial.</p>
+      </div>
+    </div>
+
+    <h3>Más problemas clásicos de la unidad</h3>
+    <div class="ex">
+      <div class="q"><span class="tag">Clásico 6.3 — N-Reinas</span><br>Descripción, características, entrada y complejidad.</div>
+      <button class="reveal-btn">Ver solución</button>
+      <div class="answer">
+        <p><strong>Qué resuelve:</strong> dado un tablero \(N\times N\), ubicar \(N\) reinas de modo que no se ataquen. Una reina ataca a otra si comparten fila, columna o diagonal.</p>
+        <p><strong>Características:</strong> ensayo-error por backtracking (se coloca una reina por fila; si ninguna columna es factible, se retrocede y se prueba otra). Representación eficiente: un <strong>vector de \(N\) posiciones</strong> con \(x[i]\) = columna de la reina de la fila \(i\), lo que evita dos reinas en la misma fila por construcción.</p>
+        <svg class="diagram" viewBox="0 0 300 300" style="max-width:320px" role="img" aria-label="Tablero 4x4 con una solución de N-Reinas">
+          <text class="d-cap" x="150" y="20">Solución para N=4 · vector x=[2,4,1,3]</text>
+          <g>
+            <rect x="50" y="40" width="50" height="50" fill="#2a3157"/><rect x="100" y="40" width="50" height="50" fill="#1a2036"/><rect x="150" y="40" width="50" height="50" fill="#2a3157"/><rect x="200" y="40" width="50" height="50" fill="#1a2036"/>
+            <rect x="50" y="90" width="50" height="50" fill="#1a2036"/><rect x="100" y="90" width="50" height="50" fill="#2a3157"/><rect x="150" y="90" width="50" height="50" fill="#1a2036"/><rect x="200" y="90" width="50" height="50" fill="#2a3157"/>
+            <rect x="50" y="140" width="50" height="50" fill="#2a3157"/><rect x="100" y="140" width="50" height="50" fill="#1a2036"/><rect x="150" y="140" width="50" height="50" fill="#2a3157"/><rect x="200" y="140" width="50" height="50" fill="#1a2036"/>
+            <rect x="50" y="190" width="50" height="50" fill="#1a2036"/><rect x="100" y="190" width="50" height="50" fill="#2a3157"/><rect x="150" y="190" width="50" height="50" fill="#1a2036"/><rect x="200" y="190" width="50" height="50" fill="#2a3157"/>
+          </g>
+          <rect x="50" y="40" width="200" height="200" fill="none" stroke="#3a4160" stroke-width="1.5"/>
+          <text x="125" y="72" font-size="30" text-anchor="middle" fill="#39d98a">♛</text>
+          <text x="225" y="122" font-size="30" text-anchor="middle" fill="#39d98a">♛</text>
+          <text x="75" y="172" font-size="30" text-anchor="middle" fill="#39d98a">♛</text>
+          <text x="175" y="222" font-size="30" text-anchor="middle" fill="#39d98a">♛</text>
+          <text class="d-el" x="40" y="69">f1</text><text class="d-el" x="40" y="119">f2</text><text class="d-el" x="40" y="169">f3</text><text class="d-el" x="40" y="219">f4</text>
+          <text class="d-el" x="75" y="255">c1</text><text class="d-el" x="125" y="255">c2</text><text class="d-el" x="175" y="255">c3</text><text class="d-el" x="225" y="255">c4</text>
+          <text class="d-l" x="150" y="285">Ninguna comparte fila, columna ni diagonal</text>
+        </svg>
+        <p><strong>Chequeos de factibilidad</strong> al colocar la reina de la fila \(i\) en la columna \(j\) (la validez cuesta \(O(n)\)):</p>
+        <ul>
+          <li><strong>Fila:</strong> garantizada por la estructura (una reina por fila).</li>
+          <li><strong>Columna:</strong> que \(j\) no aparezca ya en \(x[1..i\!-\!1]\) → \(c_i \neq c_j\).</li>
+          <li><strong>Diagonal:</strong> para toda fila previa \(k\), \(|x[k]-j|\neq |k-i|\), es decir \(|f_i-f_j|\neq|c_i-c_j|\).</li>
+        </ul>
+        <p><strong>Entrada:</strong> el tamaño \(N\) del tablero (cantidad de reinas a ubicar).</p>
+        <p><strong>Complejidad:</strong> recurrencia de <strong>sustracción</strong> con \(a=n,\,b=1,\,k=1\) → \(O(n^n)\) en el peor caso; mucho menor en la práctica por las podas de columna y diagonal.</p>
+      </div>
+    </div>
+
+    <div class="ex">
+      <div class="q"><span class="tag">Clásico 6.4 — Partición en mitades</span><br>Descripción, características, entrada y complejidad.</div>
+      <button class="reveal-btn">Ver solución</button>
+      <div class="answer">
+        <p><strong>Qué resuelve:</strong> dado un conjunto de \(n\) enteros, encontrar (si existe) dos subconjuntos disjuntos cuya suma de elementos sea la misma en los dos; si hay más de una, mostrarlas todas.</p>
+        <p><strong>Características:</strong> se recorre el conjunto y cada número se coloca en el <strong>subconjunto 1 o en el 2</strong>. Se lleva el <em>acumulado</em> de cada subconjunto para no recalcular la suma al final y poder podar apenas uno supera la mitad de la suma total. Poda inmediata: si la suma total es impar, no existe partición.</p>
+        <p><strong>Entrada:</strong> el conjunto de \(n\) enteros.</p>
+        <p><strong>Complejidad:</strong> recurrencia de <strong>sustracción</strong> con \(a=2,\,b=1,\,k=1\) → \(O(2^n)\) (dos opciones por cada uno de los \(n\) elementos).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ UVA 7 ============ -->
+  <section id="uva7">
+    <h2><span class="uva-num">UVA 7 ★</span> Juegos: MinMax y Poda α-β</h2>
+    <h4>Descripción</h4>
+    <p>Un <strong>juego</strong> es una <strong>cadena de estados</strong>: arrancás en el <em>estado inicial</em> y cada <em>jugada</em> te lleva a un estado nuevo, hasta el <em>estado final</em> (game over). Todo esto se dibuja como un <strong>árbol</strong>: la raíz es el inicio, cada rama es una jugada, y las hojas son los finales, que valen un número (ej. \(+1\) gana Max, \(-1\) gana Min, \(0\) empate). La idea es mirar todas las jugadas posibles para elegir la mejor.</p>
+    <h4>Características</h4>
+    <ul>
+      <li><strong>Adversativo</strong> (los que nos interesan): los agentes persiguen objetivos <em>mutuamente excluyentes</em> — vs. <strong>colaborativo</strong>, donde persiguen un objetivo común.</li>
+      <li>2 jugadores, <strong>Max</strong> y <strong>Min</strong>, con turnos alternados; <strong>información perfecta</strong> y sin azar (suma cero).</li>
+      <li>Cada jugada cambia el estado; los estados terminales tienen un valor numérico. <strong>Max</strong> maximiza, <strong>Min</strong> minimiza.</li>
+    </ul>
+
+    <h4>Nodos N y P (para juegos combinatorios)</h4>
+    <ul>
+      <li><strong>Nodo P</strong> (previous): el que <em>debe mover</em> <strong>pierde</strong> con juego óptimo del rival.</li>
+      <li><strong>Nodo N</strong> (next): el que debe mover <strong>tiene estrategia ganadora</strong>.</li>
+      <li><strong>Regla:</strong> un nodo es <strong>P</strong> si <em>todos</em> sus sucesores son N; es <strong>N</strong> si <em>al menos uno</em> es P.</li>
+    </ul>
+
+    <h4>Algoritmo MinMax</h4>
+    <p>Se calculan los valores de las hojas (los finales) y se van <strong>subiendo</strong> hacia la raíz: cuando le toca a <strong>Max</strong>, se queda con el <strong>mayor</strong> valor de sus hijos (quiere ganar); cuando le toca a <strong>Min</strong>, con el <strong>menor</strong> (quiere que Max pierda). El número que llega a la raíz te dice cuál es la mejor jugada.</p>
+    <p><strong>Entrada:</strong> el estado del juego y de quién es el turno (Max o Min).</p>
+    <p><strong>Complejidad:</strong> \(\Theta(k^n)\) (\(k\) = hijos por nodo, \(n\) = profundidad). El ta-te-ti completo es \(\Theta(9!)\).</p>
+
+    <h4>Poda α-β</h4>
+    <p>No es un algoritmo distinto: es una <strong>optimización de MinMax</strong> que evita explorar ramas irrelevantes, <mark>sin cambiar el resultado</mark>.</p>
+    <ul>
+      <li>\(\alpha\) = mejor valor asegurado para <strong>Max</strong> en el camino actual. Nunca decrece.</li>
+      <li>\(\beta\) = mejor valor asegurado para <strong>Min</strong> en el camino actual. Nunca crece.</li>
+      <li>Se <strong>poda cuando \(\alpha \ge \beta\)</strong>: el rival nunca dejaría llegar por esa rama.</li>
+    </ul>
+    <p><strong>Entrada:</strong> el estado, el turno y los valores \(\alpha\) y \(\beta\) (inicialmente \(-\infty\) y \(+\infty\)).</p>
+    <div class="tip"><strong>Beneficio:</strong> con orden de exploración óptimo, \(\alpha\text{-}\beta\) reduce la complejidad de \(\Theta(k^n)\) a \(\Theta\!\big(k^{\,n/2}\big)\) — equivale a explorar el <strong>doble de profundidad</strong> con el mismo costo.</div>
+
+    <div class="ex">
+      <div class="q"><span class="tag">Ejercicio resuelto 7.1 — El juego de los fósforos</span><br>Hay fósforos; cada jugador retira 1, 2 o 3. <strong>Pierde quien retira el último.</strong> Con 121 fósforos, ¿conviene jugar primero?</div>
+      <button class="reveal-btn">Ver solución</button>
+      <div class="answer">
+        <p><strong>Primero, un ejemplo chiquito para agarrarle la mano.</strong> Tomemos <strong>5 fósforos</strong>. Recordá: cada uno saca 1, 2 o 3, y <strong>pierde el que saca el último</strong>. Empieza <strong>A</strong>; veamos qué le conviene hacer a <strong>B</strong> en cada caso:</p>
+        <svg class="diagram" viewBox="0 0 640 380" role="img" aria-label="Árbol del juego de fósforos empezando con 5">
+          <text class="d-cap" x="320" y="20">5 fósforos · saca 1–3 · pierde quien saca el último</text>
+          <text class="d-el" x="34" y="56">A mueve</text>
+          <text class="d-el" x="34" y="181">B mueve</text>
+          <text class="d-el" x="34" y="306">A mueve</text>
+          <line class="d-edge" x1="300" y1="66" x2="150" y2="152"/>
+          <line class="d-edge" x1="320" y1="76" x2="320" y2="150"/>
+          <line class="d-edge" x1="340" y1="66" x2="490" y2="152"/>
+          <line class="d-edge-hi" x1="130" y1="201" x2="130" y2="274"/>
+          <line class="d-edge-hi" x1="320" y1="201" x2="320" y2="274"/>
+          <line class="d-edge-hi" x1="510" y1="201" x2="510" y2="274"/>
+          <text class="d-el" x="205" y="112">A saca 1</text>
+          <text class="d-el" x="332" y="115">A saca 2</text>
+          <text class="d-el" x="437" y="112">A saca 3</text>
+          <text class="d-ok" x="96" y="242">B saca 3</text>
+          <text class="d-ok" x="286" y="242">B saca 2</text>
+          <text class="d-ok" x="476" y="242">B saca 1</text>
+          <circle class="d-prune" cx="320" cy="50" r="26"/><text class="d-t" x="320" y="50">5</text>
+          <circle class="d-sol" cx="130" cy="175" r="26"/><text class="d-t" x="130" y="175">4</text>
+          <circle class="d-sol" cx="320" cy="175" r="26"/><text class="d-t" x="320" y="175">3</text>
+          <circle class="d-sol" cx="510" cy="175" r="26"/><text class="d-t" x="510" y="175">2</text>
+          <circle class="d-prune" cx="130" cy="300" r="26"/><text class="d-t" x="130" y="300">1</text>
+          <circle class="d-prune" cx="320" cy="300" r="26"/><text class="d-t" x="320" y="300">1</text>
+          <circle class="d-prune" cx="510" cy="300" r="26"/><text class="d-t" x="510" y="300">1</text>
+          <text class="d-bad" x="320" y="352">En los 3 casos queda 1 fósforo y le toca a A → A está obligado a sacarlo → <tspan font-weight="700">A PIERDE</tspan></text>
+        </svg>
+        <p><strong>Cómo se lee:</strong> A arranca con 5. Saque lo que saque (1, 2 o 3), le deja a B con 4, 3 o 2 — y en los <strong>tres</strong> casos B puede <strong>completar hasta dejar exactamente 1</strong> (verde). Con un solo fósforo, A no tiene opción: lo saca y pierde. O sea, desde 5 <strong>A no tiene escapatoria</strong> → <strong>5 es posición perdedora para el que mueve</strong> (rojo).</p>
+        <p><strong>La idea clave (el truco):</strong> a vos te conviene dejarle al rival <strong>1 fósforo</strong>. ¿Y cómo te asegurás de llegar ahí? Después de <em>cada</em> jugada del rival, vos <strong>completás el grupo a 4</strong> (si sacó 1, sacás 3; si sacó 2, sacás 2; si sacó 3, sacás 1). Así lo vas dejando siempre en 5, luego 1… Por eso las posiciones <strong>perdedoras</strong> son las que dejan resto 1 al dividir por 4: <strong>1, 5, 9, 13, …</strong> es decir \(n \equiv 1 \pmod 4\).</p>
+        <p><strong>Volviendo a 121:</strong> como \(121 = 4\times 30 + 1\), es \(121 \equiv 1 \pmod 4\) → <strong>posición perdedora para el que mueve</strong>. Por eso <strong>no conviene jugar primero</strong>: dejá que arranque el rival y vos completás a 4 cada vez.</p>
+        <hr style="border:0;border-top:1px solid var(--line);margin:18px 0">
+        <p><strong>Verificación</strong> analizando casos chicos (posición <em>perdedora</em> = pierde quien debe mover):</p>
+        <svg class="diagram" viewBox="0 0 560 230" role="img" aria-label="Posiciones del juego de fósforos y sus posiciones perdedoras">
+          <defs><marker id="arwF" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#39d98a"/></marker></defs>
+          <text class="d-cap" x="280" y="22">"Pierde quien saca el último" · P = pierde quien mueve · N = tiene jugada ganadora</text>
+          <path class="d-edge-hi" d="M486,96 Q465,64 446,96" marker-end="url(#arwF)"/>
+          <text class="d-ok" x="466" y="58">dejar 5</text>
+          <circle class="d-prune" cx="60" cy="120" r="24"/><text class="d-t" x="60" y="120">1</text><text class="d-bad" x="60" y="162">P</text>
+          <circle class="d-sol" cx="150" cy="120" r="24"/><text class="d-t" x="150" y="120">2</text><text class="d-ok" x="150" y="162">N</text>
+          <circle class="d-sol" cx="240" cy="120" r="24"/><text class="d-t" x="240" y="120">3</text><text class="d-ok" x="240" y="162">N</text>
+          <circle class="d-sol" cx="330" cy="120" r="24"/><text class="d-t" x="330" y="120">4</text><text class="d-ok" x="330" y="162">N</text>
+          <circle class="d-prune" cx="420" cy="120" r="24"/><text class="d-t" x="420" y="120">5</text><text class="d-bad" x="420" y="162">P</text>
+          <circle class="d-sol" cx="510" cy="120" r="24"/><text class="d-t" x="510" y="120">6</text><text class="d-ok" x="510" y="162">N</text>
+          <text class="d-l" x="280" y="200">Perdedoras ⇔ n ≡ 1 (mod 4): 1, 5, 9, 13, … · desde una N siempre podés dejar al rival en una P</text>
+        </svg>
+        <pre>n=1 PERDEDORA (tomo el último y pierdo)
+n=2,3,4 GANADORAS (puedo dejar al rival en n=1)
+n=5 PERDEDORA (solo puedo dejar 4,3,2 → todas ganadoras para el rival)
+n=9 PERDEDORA ...</pre>
+        <p><strong>Patrón:</strong> las posiciones perdedoras cumplen \(n \equiv 1 \pmod 4\): \(1,5,9,13,\dots\) Sea cual sea la jugada del rival (1,2,3), siempre puedo completar el grupo a 4 y devolverlo a "múltiplo de 4 + 1".</p>
+        <p>Como \(121 = 4\times 30 + 1\), es decir \(121 \equiv 1 \pmod 4\), la posición inicial es <strong>perdedora para quien mueve primero</strong>. → <strong>No conviene jugar primero.</strong></p>
+        <div class="warn">Recalculá siempre el patrón con casos chicos antes de generalizar: confundir "múltiplo de 4" con "múltiplo de 4 + 1" invierte toda la conclusión.</div>
+      </div>
+    </div>
+
+    <div class="ex">
+      <div class="q"><span class="tag">★ Ejercicio nuevo 7.2 — Poda α-β a mano</span><br>Árbol de profundidad 3, raíz Max. Hojas (izq→der): \([3, 5, 6, 9, 1, 2, 0, -1]\). Aplicá MinMax con poda \(\alpha\text{-}\beta\) y decí qué se poda.</div>
+      <button class="reveal-btn">Ver solución</button>
+      <div class="answer">
+        <p><strong>Quién es quién</strong> (los turnos se alternan de arriba hacia abajo):</p>
+        <ul>
+          <li><strong>Raíz = MAX</strong> (vos) → querés el número <strong>más grande</strong>.</li>
+          <li><strong>Los 2 hijos = MIN</strong> (el rival) → quiere el <strong>más chico</strong>.</li>
+          <li><strong>Los 4 nietos = MAX</strong> otra vez.</li>
+          <li><strong>Las 8 hojas</strong> = los resultados finales (los números dados).</li>
+        </ul>
+        <p>En el dibujo: <span style="color:var(--accent)">▲ MAX</span> toma el mayor de sus hijos, <span style="color:var(--accent2)">▽ MIN</span> el menor. Los números en rojo son los que la poda α-β <strong>nunca necesita mirar</strong>.</p>
+        <svg class="diagram" viewBox="0 0 800 370" role="img" aria-label="Árbol MinMax con poda alfa-beta">
+          <text class="d-cap" x="400" y="20">Valores propagados hacia la raíz · las ramas rojas se podan (no cambian el resultado)</text>
+          <!-- edges -->
+          <line class="d-edge" x1="400" y1="40" x2="210" y2="125"/>
+          <line class="d-edge" x1="400" y1="40" x2="590" y2="125"/>
+          <line class="d-edge" x1="210" y1="125" x2="110" y2="215"/>
+          <line class="d-edge" x1="210" y1="125" x2="310" y2="215"/>
+          <line class="d-edge" x1="590" y1="125" x2="490" y2="215"/>
+          <line class="d-edge" x1="590" y1="125" x2="690" y2="215"/>
+          <line class="d-edge" x1="110" y1="215" x2="60" y2="289"/>
+          <line class="d-edge" x1="110" y1="215" x2="160" y2="289"/>
+          <line class="d-edge" x1="310" y1="215" x2="260" y2="289"/>
+          <line class="d-edge-prune" x1="310" y1="215" x2="360" y2="289"/>
+          <line class="d-edge" x1="490" y1="215" x2="440" y2="289"/>
+          <line class="d-edge" x1="490" y1="215" x2="540" y2="289"/>
+          <line class="d-edge-prune" x1="690" y1="215" x2="640" y2="289"/>
+          <line class="d-edge-prune" x1="690" y1="215" x2="740" y2="289"/>
+          <!-- internal nodes -->
+          <circle class="d-max" cx="400" cy="40" r="24"/><text class="d-t" x="400" y="40">5</text>
+          <text class="d-l" x="440" y="34">MAX ▲</text>
+          <circle class="d-min" cx="210" cy="125" r="22"/><text class="d-t" x="210" y="125">5</text>
+          <circle class="d-min" cx="590" cy="125" r="22"/><text class="d-t" x="590" y="125">0</text>
+          <text class="d-l" x="210" y="98">MIN ▽</text><text class="d-l" x="590" y="98">MIN ▽</text>
+          <circle class="d-max" cx="110" cy="215" r="21"/><text class="d-t2" x="110" y="215">5</text>
+          <circle class="d-max" cx="310" cy="215" r="21"/><text class="d-t2" x="310" y="215">9</text>
+          <circle class="d-max" cx="490" cy="215" r="21"/><text class="d-t2" x="490" y="215">2</text>
+          <circle class="d-max" cx="690" cy="215" r="21"/><text class="d-t2" x="690" y="215">0</text>
+          <!-- leaves -->
+          <g>
+            <rect class="d-node" x="40" y="290" width="40" height="32" rx="6"/><text class="d-t2" x="60" y="306">3</text>
+            <rect class="d-node" x="140" y="290" width="40" height="32" rx="6"/><text class="d-t2" x="160" y="306">5</text>
+            <rect class="d-node" x="240" y="290" width="40" height="32" rx="6"/><text class="d-t2" x="260" y="306">6</text>
+            <rect class="d-prune" x="340" y="290" width="40" height="32" rx="6"/><text class="d-t2" x="360" y="306">9</text>
+            <rect class="d-node" x="420" y="290" width="40" height="32" rx="6"/><text class="d-t2" x="440" y="306">1</text>
+            <rect class="d-node" x="520" y="290" width="40" height="32" rx="6"/><text class="d-t2" x="540" y="306">2</text>
+            <rect class="d-prune" x="620" y="290" width="40" height="32" rx="6"/><text class="d-t2" x="640" y="306">0</text>
+            <rect class="d-prune" x="720" y="290" width="40" height="32" rx="6"/><text class="d-t2" x="740" y="306">−1</text>
+          </g>
+          <text class="d-bad" x="400" y="352">✂ podadas por α-β: la hoja 9, y toda la rama derecha inferior (0 y −1)</text>
+        </svg>
+        <p><strong>Los valores, subiendo desde abajo</strong> (cada MAX toma el mayor de sus 2 hojas; cada MIN el menor de sus 2 nietos; la raíz el mayor de los 2 MIN):</p>
+        <table class="cmp">
+          <tr><th>Nietos (MAX)</th><td>A=máx(3,5)=<b>5</b></td><td>B=máx(6,9)=<b>9</b></td><td>C=máx(1,2)=<b>2</b></td><td>D=máx(0,−1)=<b>0</b></td></tr>
+          <tr><th>Hijos (MIN)</th><td colspan="2">IZQ=mín(5,9)=<b>5</b></td><td colspan="2">DER=mín(2,0)=<b>0</b></td></tr>
+          <tr><th>Raíz (MAX)</th><td colspan="4">máx(5,0)=<b>5</b> ← valor del juego</td></tr>
+        </table>
+        <p><strong>Ahora la poda</strong> (mirando de izquierda a derecha, sin calcular todo):</p>
+        <p><strong>1) Se poda la hoja 9.</strong> En la rama izquierda (un MIN) calculo primero \(A=5\). Ese MIN ya tiene una opción de 5, así que <em>va a valer 5 o menos</em>. Paso al nieto \(B\) (un MAX) y su primera hoja es \(6\): como \(B\) es MAX, va a ser <strong>\(\ge 6\)</strong>. Pero al MIN un 6 le sirve <em>menos</em> que el 5 que ya tenía (MIN quiere lo chico), así que <strong>jamás va a elegir \(B\)</strong> → no hace falta mirar la otra hoja de \(B\) (el 9). Se poda.</p>
+        <p><strong>2) Se poda TODA la rama derecha (las hojas 0 y −1).</strong> Con la izquierda ya cerrada, la raíz (MAX = vos) tiene un <strong>5 asegurado</strong>. Voy a la rama derecha (otro MIN) y calculo su primer nieto \(C=2\). Como ese MIN toma el <em>mínimo</em> de sus opciones, la rama derecha va a valer <strong>2 o menos</strong>, pase lo que pase. Pero vos ya tenés un 5, que es mejor que cualquier cosa \(\le 2\) → <strong>la derecha nunca te va a convenir</strong>. Por eso <strong>da igual cuánto valgan las hojas 0 y −1</strong>: no las mirás, se poda el nieto \(D\) completo.</p>
+        <div class="key"><strong>La regla en una frase:</strong> apenas te das cuenta de que una rama <em>no puede superar</em> lo que ya tenés asegurado, la cortás. Acá el 5 de la izquierda "mató" a toda la derecha porque la derecha (un MIN) ya prometía \(\le 2\).</div>
+        <p><strong>Resultado: 5</strong>, idéntico a MinMax normal. La poda no cambió la respuesta, solo te ahorró mirar el 9, el 0 y el −1.</p>
+        <p>Se ahorró explorar la hoja \(9\) y las hojas \(0\) y \(-1\). Resultado idéntico a MinMax puro: \(\boldsymbol{5}\).</p>
+      </div>
+    </div>
+
+    <div class="ex">
+      <div class="q"><span class="tag">Ejercicio 7.3 — Juego de las gemas (estilo Ejercicio 1 del simulacro)</span><br>Una pila de \(n\) gemas. En cada turno hay que <strong>dividir una pila en dos de tamaños distintos</strong> (\(n_1 \neq n_2\)). Termina cuando todas las pilas tienen 1 o 2. <strong>Pierde quien no puede jugar.</strong> Árbol parcial para \(n=7\).</div>
+      <button class="reveal-btn">Ver solución</button>
+      <div class="answer">
+        <p><strong>Qué resuelve:</strong> determinar la estrategia ganadora. El <strong>estado no es un número</strong> sino el <em>multiconjunto de pilas</em> sobre la mesa. En cada turno se elige una pila \(\ge 3\) y se reemplaza por dos partes de tamaños <strong>distintos</strong>.</p>
+        <div class="warn"><strong>Ojo con las reglas:</strong> partir en dos partes <em>iguales</em> no vale (ej. \(4=2+2\) está prohibido; \(4\) solo se puede partir en \(1+3\)). Una pila de <strong>1 o 2 ya no se puede dividir</strong> (el 2 sería \(1+1\), partes iguales). El juego termina cuando <strong>todas</strong> las pilas quedan en \(\{1,2\}\): el que tiene que jugar ahí no puede y <strong>pierde</strong>.</div>
+        <svg class="diagram" viewBox="0 0 720 320" role="img" aria-label="Árbol del juego de las gemas para n=7">
+          <text class="d-cap" x="360" y="20">Estado = multiconjunto de pilas · cada arco divide una pila en dos partes distintas</text>
+          <line class="d-edge" x1="360" y1="42" x2="150" y2="120"/>
+          <line class="d-edge" x1="360" y1="42" x2="360" y2="120"/>
+          <line class="d-edge" x1="360" y1="42" x2="570" y2="120"/>
+          <line class="d-edge" x1="150" y1="120" x2="80" y2="215"/>
+          <line class="d-edge" x1="150" y1="120" x2="220" y2="215"/>
+          <line class="d-edge" x1="360" y1="120" x2="320" y2="215"/>
+          <line class="d-edge" x1="360" y1="120" x2="440" y2="215"/>
+          <line class="d-edge" x1="570" y1="120" x2="560" y2="215"/>
+          <line class="d-edge" x1="570" y1="120" x2="660" y2="215"/>
+          <text class="d-el" x="240" y="82">7=1+6</text>
+          <text class="d-el" x="368" y="86">7=2+5</text>
+          <text class="d-el" x="480" y="82">7=3+4</text>
+          <ellipse class="d-max" cx="360" cy="42" rx="34" ry="22"/><text class="d-t2" x="360" y="42">{7}</text>
+          <ellipse class="d-node" cx="150" cy="120" rx="36" ry="22"/><text class="d-t2" x="150" y="120">{1,6}</text>
+          <ellipse class="d-node" cx="360" cy="120" rx="36" ry="22"/><text class="d-t2" x="360" y="120">{2,5}</text>
+          <ellipse class="d-node" cx="570" cy="120" rx="36" ry="22"/><text class="d-t2" x="570" y="120">{3,4}</text>
+          <ellipse class="d-node" cx="80" cy="215" rx="42" ry="22"/><text class="d-t2" x="80" y="215">{1,1,5}</text>
+          <ellipse class="d-node" cx="220" cy="215" rx="42" ry="22"/><text class="d-t2" x="220" y="215">{1,2,4}</text>
+          <ellipse class="d-node" cx="320" cy="215" rx="42" ry="22"/><text class="d-t2" x="320" y="215">{1,2,4}</text>
+          <ellipse class="d-node" cx="440" cy="215" rx="42" ry="22"/><text class="d-t2" x="440" y="215">{2,2,3}</text>
+          <ellipse class="d-node" cx="560" cy="215" rx="42" ry="22"/><text class="d-t2" x="560" y="215">{1,2,4}</text>
+          <ellipse class="d-node" cx="660" cy="215" rx="42" ry="22"/><text class="d-t2" x="660" y="215">{1,3,3}</text>
+          <text class="d-l" x="360" y="270">Se sigue dividiendo hasta que toda pila ∈ {1,2} (hoja). Ahí pierde quien debe jugar.</text>
+          <text class="d-l" x="360" y="290">Etiquetado hacia atrás: estado P si todos los sucesores son N; N si alguno es P.</text>
+        </svg>
+        <p><strong>Cómo se construye el árbol (arriba):</strong> desde el estado inicial \(\{7\}\), por cada pila \(\ge 3\) se generan todas las divisiones en dos partes distintas (con \(n_1 \lt n_2\) para no repetir la misma jugada, ej. \((1,6)\) y \((6,1)\)); cada división produce un estado hijo, y se recursiona hasta que toda pila queda en \(\{1,2\}\) (hoja).</p>
+        <p><strong>Entrada:</strong> el estado inicial (multiconjunto de pilas, \(\{n\}\) al comienzo).</p>
+        <p><strong>Etiquetado N/P (así se decide quién gana):</strong> a cada estado le ponés una etiqueta.</p>
+        <ul>
+          <li><strong>P</strong> = <em>pierde</em> el que tiene que jugar (posición mala para vos).</li>
+          <li><strong>N</strong> = <em>gana</em> el que tiene que jugar (posición buena).</li>
+          <li>Las hojas (todas las pilas en \(\{1,2\}\)) son <strong>P</strong>: el que llega ahí no puede jugar y pierde.</li>
+          <li>Regla hacia atrás: un estado es <strong>P si TODOS sus hijos son N</strong> (te lleve donde te lleve, el rival queda ganador); es <strong>N si AL MENOS UN hijo es P</strong> (podés dejar al rival en una posición perdedora).</li>
+        </ul>
+        <p>Tu objetivo siempre es el mismo: <strong>dejar al rival en una posición P</strong>.</p>
+        <p><strong>Ejemplo chiquito — ¿quién gana con \(n=5\)?</strong> Etiquetamos de abajo hacia arriba:</p>
+        <ul>
+          <li>\(\{5\}\) tiene 2 jugadas: partir en \((1,4)\to\{1,4\}\), o en \((2,3)\to\{2,3\}\).</li>
+          <li>\(\{2,3\}\): única jugada, partir el 3 en \((1,2)\to\{1,2,2\}\), que es terminal (<strong>P</strong>). Tiene un hijo P → \(\{2,3\}\) es <strong>N</strong>.</li>
+          <li>\(\{1,4\}\): única jugada, \(4\to(1,3)\Rightarrow\{1,1,3\}\); de ahí \(3\to(1,2)\Rightarrow\{1,1,1,2\}\) terminal (P). Subiendo: \(\{1,1,3\}\) es N, y \(\{1,4\}\) (su único hijo es N) es <strong>P</strong>.</li>
+          <li>\(\{5\}\): sus hijos son \(\{1,4\}\) (<strong>P</strong>) y \(\{2,3\}\) (N). Como tiene un hijo P → \(\{5\}\) es <strong>N</strong>.</li>
+        </ul>
+        <p><strong>Conclusión:</strong> con \(n=5\) <strong>gana el primero</strong>, jugando \(5=(1,4)\) para dejar al rival en \(\{1,4\}\), que es perdedora. (Es la misma lógica que los fósforos: buscás la jugada que deja al otro en P.)</p>
+      </div>
+    </div>
+
+    <div class="ex">
+      <div class="q"><span class="tag">Clásico 7.4 — Ta-te-ti (tres en línea)</span><br>¿Cómo se modela con MinMax y por qué motiva la poda \(\alpha\text{-}\beta\)?</div>
+      <button class="reveal-btn">Ver solución</button>
+      <div class="answer">
+        <p><strong>El juego:</strong> tablero \(3\times3\), dos jugadores (○ y ×) que ponen una ficha por turno; gana quien alinea 3 propias en fila, columna o diagonal.</p>
+        <p><strong>Cómo se modela con MinMax:</strong> uno es <strong>Max</strong> (digamos ○, quiere llegar a \(+1\) = gana ○) y el otro <strong>Min</strong> (×, quiere \(-1\) = gana ×). Cada tablero terminal vale <strong>\(+1\)</strong> si ganó ○, <strong>\(-1\)</strong> si ganó ×, <strong>\(0\)</strong> si empató. Se prueban todas las jugadas y se suben los valores: en el turno de ○ se toma el <strong>máximo</strong>, en el de × el <strong>mínimo</strong>.</p>
+        <p><strong>Por qué \(\Theta(9!)\):</strong> la primera ficha tiene 9 casilleros para elegir, la segunda 8, la tercera 7… En el peor caso (nadie gana hasta llenar) son \(9\times8\times7\times\cdots\times1 = 9! \approx 362.880\) hojas. Es manejable para una compu, pero muestra cómo <strong>explota</strong> el árbol (en ajedrez esto ya es imposible de recorrer entero).</p>
+        <div class="tip"><strong>Dato lindo:</strong> con juego perfecto de los dos, el ta-te-ti <strong>siempre termina en empate</strong> (la raíz vale \(0\)). Ninguno puede forzar la victoria si el otro no se equivoca.</div>
+        <p><strong>Por qué motiva la poda \(\alpha\text{-}\beta\):</strong> como muchísimas ramas llevan al mismo resultado o a uno peor, α-β corta un montón <em>sin cambiar la decisión</em>. Por eso el ta-te-ti es el ejemplo clásico para introducir la poda.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ UVA 8 ============ -->
+  <section id="uva8">
+    <h2><span class="uva-num">UVA 8 ★</span> Ramificación y Poda (Branch & Bound)</h2>
+    <h4>Descripción</h4>
+    <p>Es una <strong>optimización del backtracking</strong> para problemas de <strong>optimización</strong> (encontrar el óptimo, máx o mín). Su razón de ser: tener un <strong>criterio (la cota)</strong> que indique que, más allá de cierto punto, una rama <mark>no puede contener una solución mejor</mark> — así se descartan ramas enteras sin explorarlas.</p>
+    <h4>Características</h4>
+    <ul>
+      <li>Sirve para <strong>optimización</strong>: principalmente <em>minimización</em>; los de maximización se adaptan (ver el truco de los negativos).</li>
+      <li><strong>Ventaja:</strong> reduce mucho la cantidad de nodos del árbol que se visitan.</li>
+      <li>Se explora un árbol (o grafo acíclico dirigido) donde cada nodo es una solución parcial.</li>
+    </ul>
+
+    <h4>Estados de un nodo</h4>
+    <ul>
+      <li><strong>Vivo</strong>: factible y prometedor, aún no generó todos sus hijos.</li>
+      <li><strong>Muerto</strong>: no genera más hijos (ya se generaron todos, o es infactible, o fue podado).</li>
+      <li><strong>En expansión</strong>: se están generando sus hijos ahora (solo uno a la vez).</li>
+    </ul>
+
+    <h4>Las tres cantidades clave (en criollo)</h4>
+    <table>
+      <tr><th>Cantidad</th><th>Apodo</th><th>Qué es</th></tr>
+      <tr><td>\(lim\)</td><td>el récord</td><td>El costo/valor de la <strong>mejor solución completa</strong> encontrada hasta ahora. Arranca con una solución cualquiera y va mejorando.</td></tr>
+      <tr><td>cota optimista</td><td>el techo</td><td>Lo <strong>mejor</strong> que se podría lograr por esa rama: lo ya gastado + lo mínimo que falta (a veces "cortando con un cuchillo" el próximo objeto). Se usa para <strong>podar</strong> y para elegir la rama más prometedora (LC-BB).</td></tr>
+      <tr><td>valor garantizado</td><td>el piso</td><td>Un resultado <strong>realmente alcanzable</strong> por esa rama (ej., en la mochila, sin fraccionar). Sirve para <strong>actualizar el récord</strong> \(lim\).</td></tr>
+    </table>
+    <div class="key"><strong>Regla de oro (poda):</strong> si la estimación optimista (el techo) de una rama ya es <em>peor</em> que el récord \(lim\), se le clava la <span style="color:var(--bad)">cruz roja</span> y no se explora — es imposible que mejore lo que ya tenés. La cota debe ser <strong>efectiva y barata</strong> de calcular.</div>
+    <div class="warn"><strong>Ojo con las letras \(c\) y \(u\):</strong> la cátedra las usa con sentidos algo distintos según el problema. En la <em>asignación</em>, \(c\) es la cota optimista del nodo; en la <em>mochila 0-1</em>, \(u\) es el valor entero garantizado (piso) y \(c\) el fraccionario optimista (techo). Quedate con los conceptos —récord, techo, piso—, no con la letra.</div>
+    <div class="tip"><strong>Mochila 0-1 (recordatorio):</strong> mochila de capacidad \(m\); \(n\) objetos con peso \(p_i\) y valor \(v_i\); los objetos <strong>no se fraccionan</strong>; se busca maximizar el valor sin exceder \(m\). <strong>Truco:</strong> como B&B está pensado para <em>minimizar</em>, para <em>maximizar</em> se trabaja con los valores en <strong>negativo</strong> (minimizar \(-valor\) = maximizar valor, donde \(-38\) es "mejor" que \(-32\)). El techo se calcula fraccionando el próximo objeto para llenar justo el espacio libre.</div>
+
+    <h4>Variantes</h4>
+    <table>
+      <tr><th>Tipo</th><th>Estructura de vivos</th><th>Criterio</th></tr>
+      <tr><td>FIFO-BB</td><td>Cola</td><td>Expande el más antiguo (por niveles)</td></tr>
+      <tr><td>LIFO-BB</td><td>Pila</td><td>Expande el último (en profundidad)</td></tr>
+      <tr><td><strong>LC-BB</strong> (Least Cost)</td><td>Cola de prioridad</td><td>Expande el de <strong>menor cota</strong> (best-first) — <em>el más usado</em></td></tr>
+    </table>
+
+    <h4>Cómo funciona (pasos conceptuales)</h4>
+    <ol>
+      <li>Se mantiene una <strong>cola de nodos vivos</strong> y se saca siempre el <strong>más prometedor</strong> (menor cota, en LC-BB).</li>
+      <li>Se <strong>expande</strong> ese nodo generando sus hijos y se calcula la <strong>cota local</strong> de cada uno.</li>
+      <li>Se <strong>poda</strong> cada hijo por factibilidad y por cota (si ya no puede mejorar a \(lim\)).</li>
+      <li>Si un hijo es solución completa mejor que \(lim\), se actualiza \(lim\); si no, entra a la cola de vivos.</li>
+      <li>Termina cuando la cola queda vacía o ningún vivo puede mejorar la mejor solución.</li>
+    </ol>
+    <p><strong>Entrada:</strong> el estado inicial (solución parcial vacía) con su cota; la salida es la solución óptima.</p>
+
+    <div class="tip"><strong>B&B vs Backtracking:</strong> B&B expande siempre el nodo <em>más prometedor</em> de toda la cola de vivos (no el más profundo) y poda por <em>cota</em> aunque el nodo sea factible. Backtracking va en profundidad y poda solo por infactibilidad.</div>
+
+    <div class="ex">
+      <div class="q"><span class="tag">Ejercicio resuelto 8.1 — Asignación de tareas (ejemplo de cátedra)</span><br>4 personas, 4 tareas; cada persona hace una tarea distinta; minimizar el costo total. ¿Cómo se calculan las cotas y se ramifica?</div>
+      <button class="reveal-btn">Ver solución</button>
+      <div class="answer">
+        <table>
+          <tr><th></th><th>t1</th><th>t2</th><th>t3</th><th>t4</th></tr>
+          <tr><td>a</td><td>11</td><td>12</td><td>18</td><td>40</td></tr>
+          <tr><td>b</td><td>14</td><td>15</td><td>13</td><td>22</td></tr>
+          <tr><td>c</td><td>11</td><td>17</td><td>19</td><td>23</td></tr>
+          <tr><td>d</td><td>17</td><td>14</td><td>20</td><td>28</td></tr>
+        </table>
+        <p><strong>Modelado:</strong> asignar a cada persona una tarea distinta minimizando el costo total (una tarea por persona, sin repetir).</p>
+        <p><strong>Récord inicial \(lim\):</strong> una asignación cualquiera da, por ejemplo, 73.</p>
+        <p><strong>Cota de un nodo (el techo optimista):</strong> lo ya asignado + el mínimo de cada tarea que falta (aunque se repita persona). Ej. si \(a\to t_1\,(11)\): \(11+\min(t_2)+\min(t_3)+\min(t_4)\) sobre las personas libres \(=11+14+13+22=60\).</p>
+        <p>Se expande siempre la rama de <strong>menor cota</strong> (LC-BB). Al llegar a asignaciones completas mejores, el récord baja: \(73 \to 64 \to 61\). Todo nodo cuya cota ya iguale o supere el récord (65, 68, 78…) se poda de inmediato.</p>
+        <p><strong>Óptimo \(=61\):</strong> \(a\to t_1,\ b\to t_3,\ c\to t_4,\ d\to t_2\) \((11+13+23+14=61)\).</p>
+      </div>
+    </div>
+
+    <div class="ex">
+      <div class="q"><span class="tag">★ Ejercicio nuevo 8.2 — Selección de proyectos (Ejercicio 2 del simulacro, mochila 0-1 por B&B)</span><br>Presupuesto \(K=10\). Proyectos (costo, impacto): \(P_1(4,10),\ P_2(5,10),\ P_3(6,9)\). Maximizar impacto sin superar \(K\). Ramificá y estimá complejidad.</div>
+      <button class="reveal-btn">Ver solución</button>
+      <div class="answer">
+        <p>Ordenados por impacto/costo (como en mochila fraccionaria, para cotas ajustadas): \(P_1(2{,}5),\ P_2(2{,}0),\ P_3(1{,}5)\).</p>
+        <p><strong>Cota optimista raíz (relajación fraccionaria):</strong> \(P_1\) completo (\(u=10\), resto \(=6\)) + \(P_2\) completo (\(u=10\), resto \(=1\)) + fracción de \(P_3\) (\(\tfrac16\cdot 9 = 1{,}5\)) → cota \(\approx 21{,}5\).</p>
+        <p><strong>Árbol binario incluir / no incluir (orden \(P_1,P_2,P_3\)):</strong></p>
+        <svg class="diagram" viewBox="0 0 720 380" role="img" aria-label="Árbol de Ramificación y Poda para selección de proyectos">
+          <text class="d-cap" x="360" y="18">Árbol binario incluir / no incluir · se poda por cota vs. lim</text>
+          <line class="d-edge" x1="360" y1="67" x2="200" y2="117"/>
+          <line class="d-edge-prune" x1="360" y1="67" x2="540" y2="117"/>
+          <line class="d-edge" x1="200" y1="163" x2="130" y2="217"/>
+          <line class="d-edge" x1="200" y1="163" x2="345" y2="217"/>
+          <line class="d-edge-prune" x1="130" y1="263" x2="80" y2="312"/>
+          <line class="d-edge" x1="130" y1="263" x2="210" y2="312"/>
+          <line class="d-edge" x1="345" y1="263" x2="345" y2="312"/>
+          <text class="d-el" x="270" y="96">incluir P1</text>
+          <text class="d-el" x="455" y="96">no P1</text>
+          <text class="d-el" x="150" y="196">incluir P2</text>
+          <text class="d-el" x="295" y="196">no P2</text>
+          <text class="d-el" x="92" y="292">incluir P3</text>
+          <text class="d-el" x="185" y="292">no P3</text>
+          <text class="d-el" x="380" y="292">incluir P3</text>
+          <!-- root -->
+          <rect class="d-max" x="295" y="44" width="130" height="46" rx="8"/><text class="d-t2" x="360" y="60">Raíz</text><text class="d-l" x="360" y="78">cota ≈ 21,5</text>
+          <rect class="d-node" x="140" y="117" width="120" height="46" rx="8"/><text class="d-t2" x="200" y="133">P1 dentro</text><text class="d-l" x="200" y="151">imp = 10</text>
+          <rect class="d-prune" x="480" y="117" width="120" height="46" rx="8"/><text class="d-t2" x="540" y="133">P1 fuera</text><text class="d-bad" x="540" y="151">cota 17,5 · PODA</text>
+          <rect class="d-node" x="70" y="217" width="120" height="46" rx="8"/><text class="d-t2" x="130" y="233">P2 dentro</text><text class="d-l" x="130" y="251">imp = 20</text>
+          <rect class="d-node" x="285" y="217" width="120" height="46" rx="8"/><text class="d-t2" x="345" y="233">P2 fuera</text><text class="d-l" x="345" y="251">resto = 5</text>
+          <rect class="d-prune" x="20" y="312" width="120" height="46" rx="8"/><text class="d-t2" x="80" y="328">P3 dentro</text><text class="d-bad" x="80" y="346">✗ no factible</text>
+          <rect class="d-sol" x="150" y="312" width="120" height="46" rx="8"/><text class="d-t2" x="210" y="328">SOLUCIÓN</text><text class="d-ok" x="210" y="346">imp = 20 → lim</text>
+          <rect class="d-node" x="285" y="312" width="120" height="46" rx="8"/><text class="d-t2" x="345" y="328">P3 dentro</text><text class="d-l" x="345" y="346">imp = 19 (peor)</text>
+        </svg>
+        <p>En el árbol de arriba: incluir P1 y P2 da la solución de impacto 20 (verde); incluir P3 sobre eso es no factible porque excede el presupuesto (rojo); y la rama "no P1" se poda porque su cota \(17{,}5 \lt lim=20\).</p>
+        <p><strong>Óptimo: \(\{P_1,P_2\}\), impacto \(=20\), costo \(9 \le 10\).</strong></p>
+        <p>Lo que hay que mostrar en el examen: (1) árbol binario incluir/no-incluir, (2) cálculo de cota con relajación fraccionaria en cada nodo, (3) al menos una poda justificada por \(lim\). <strong>Complejidad: \(O(2^n)\)</strong> peor caso, reducida por las podas.</p>
+      </div>
+    </div>
+
+    <div class="ex">
+      <div class="q"><span class="tag">TSP y ciclos hamiltonianos (para conocer)</span><br>¿Cómo se acota el TSP y qué relación tiene con los ciclos hamiltonianos?</div>
+      <button class="reveal-btn">Ver solución</button>
+      <div class="answer">
+        <p><strong>TSP</strong> (viajante): visitar cada ciudad una vez y volver al origen, mínimo costo. Es <strong>NP-difícil</strong>. Fuerza bruta \(\Theta(n!)\); PD (Held-Karp) \(\Theta(n^2 2^n)\). B&B acota <strong>reduciendo la matriz de costos</strong>: a cada fila se le resta su mínimo, luego a cada columna el suyo; la suma de lo restado es una <strong>cota inferior</strong>. La cota es no decreciente al bajar en el árbol → permite podar.</p>
+        <p><strong>Ciclo hamiltoniano</strong>: recorrido cerrado que pasa una vez por cada vértice (NP-completo). Se <strong>reduce a TSP</strong>: se completa el grafo con aristas de peso 1 (existentes) y 2 (nuevas); si el TSP da costo \(|V|\), el ciclo existe en el grafo original.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SIMULACRO -->
+  <section id="simulacro">
+    <h2>🧪 Simulacro de Final — los 4 ejercicios</h2>
+    <p>Este es el simulacro oficial de la cátedra. Cada ejercicio corresponde a una técnica. Los tenés todos resueltos arriba, en su unidad; acá el mapa:</p>
+    <table>
+      <tr><th>Ej.</th><th>Enunciado</th><th>Técnica</th><th>Solución</th></tr>
+      <tr><td>1</td><td>Juego de las gemas (dividir pila en dos distintas)</td><td>UVA 7 · MinMax</td><td><a href="#uva7">→ Ej. 7.3</a></td></tr>
+      <tr><td>2</td><td>Selección de proyectos con presupuesto \(K\)</td><td>UVA 8 · B&B (mochila 0-1)</td><td><a href="#uva8">→ Ej. 8.2</a></td></tr>
+      <tr><td>3</td><td>Recorrido en profundidad desde el nodo 4</td><td>UVA 6 · DFS/Backtracking</td><td><a href="#uva6">→ Ej. 6.1</a></td></tr>
+      <tr><td>4</td><td>Ganancias no consecutivas por ciudad (recurrencia \(D[i]=\max(D[i-1],\,D[i-2]+G[i])\))</td><td>UVA 5 · Prog. Dinámica</td><td><a href="#uva5">→ UVA 5</a></td></tr>
+    </table>
+    <div class="key"><strong>Cómo se corrige:</strong> 50% de cada ejercicio para aprobar. En Ej. 1 y 4 el pseudocódigo + la justificación pesan tanto como el resultado. En Ej. 2 mostrá el árbol con cotas y una poda. En Ej. 3 la "particularidad" del nodo dirigido es medio ejercicio.</div>
+  </section>
+
+  <!-- PARCIAL -->
+  <section id="parcial">
+    <h2>📄 Parcial 8-Nov — resuelto</h2>
+    <p>Toca temas de la primera mitad que también pueden aparecer. 4 ejercicios:</p>
+    <div class="ex">
+      <div class="q"><span class="tag">P1 · Multiple choice (15 pts)</span><br>¿Cuál describe correctamente una diferencia/similitud entre Backtracking y Divide & Conquista?</div>
+      <button class="reveal-btn">Ver respuesta</button>
+      <div class="answer">
+        <p>Correcta: <strong>(b)</strong> — "En Backtracking se exploran todas las soluciones sistemáticamente y se retrocede ante caminos inválidos, mientras que en D&C los subproblemas se resuelven de forma independiente y sus soluciones se combinan."</p>
+        <p>Las otras fallan: (a) Backtracking sí retrocede; (c) ni D&C es solo optimización ni Backtracking solo búsqueda; (d) no hace falta generar el árbol completo de antemano.</p>
+      </div>
+    </div>
+    <div class="ex">
+      <div class="q"><span class="tag">P2 · Complejidad recursiva (25 pts)</span><br>Ver ejercicio 1.2 arriba (mismo método): <code>calcularUnDato</code> lineal, <code>TrabajarCon</code> cuadrático, rama recursiva \(\text{metodo}(n/2)\).</div>
+      <button class="reveal-btn">Ver respuesta</button>
+      <div class="answer"><p>\(T(n)=T(n/2)+O(n)\) → división \(a=1,\,b=2,\,k=1,\ a\lt b^k \Rightarrow \Theta(n)\). Detalle completo en <a href="#uva1">UVA 1 · Ej. 1.2</a>.</p></div>
+    </div>
+    <div class="ex">
+      <div class="q"><span class="tag">P3 · Grafo de ciudades (30 pts)</span><br>Conectar A,B,C,D,E con mínimo costo sin ciclos. (a) ¿Qué algoritmo? (b) Complejidad.</div>
+      <button class="reveal-btn">Ver respuesta</button>
+      <div class="answer"><p><strong>MST</strong> — Kruskal (\(\Theta(a\log a)\)) o Prim (\(O(n^2)\)). Detalle en <a href="#uva4">UVA 4 · Ej. 4.1</a>.</p></div>
+    </div>
+    <div class="ex">
+      <div class="q"><span class="tag">P4 · Mochila 0-1 por PD (30 pts)</span><br>\(\text{peso}=[2,1,3,2]\), \(\text{valor}=[12,10,20,15]\), \(W=5\). Completar la tabla DP.</div>
+      <button class="reveal-btn">Ver respuesta</button>
+      <div class="answer">
+        <p>Recurrencia mochila 0-1: \(V[i][j]=\max\big(V[i\!-\!1][j],\; v_i+V[i\!-\!1][j\!-\!p_i]\big)\) si \(p_i\le j\), sino \(V[i\!-\!1][j]\). Tabla (filas = objetos \(1..4\), columnas \(j=0..5\)):</p>
+        <table class="cmp">
+          <tr><th>obj \ \(j\)</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr>
+          <tr><td>\(o_1\,(p2,v12)\)</td><td>0</td><td>0</td><td>12</td><td>12</td><td>12</td><td>12</td></tr>
+          <tr><td>\(o_2\,(p1,v10)\)</td><td>0</td><td>10</td><td>12</td><td>22</td><td>22</td><td>22</td></tr>
+          <tr><td>\(o_3\,(p3,v20)\)</td><td>0</td><td>10</td><td>12</td><td>22</td><td>30</td><td>32</td></tr>
+          <tr><td>\(o_4\,(p2,v15)\)</td><td>0</td><td>10</td><td>15</td><td>25</td><td>30</td><td>37</td></tr>
+        </table>
+        <p><strong>Valor máximo \(=37\)</strong> (celda \([4][5]\)). Reconstrucción: \(o_4\,(p2,v15) + o_2\,(p1,v10) + o_1\,(p2,v12)\) = peso 5, valor 37. <strong>Complejidad \(O(o\cdot W)\)</strong> (pseudo-polinomial).</p>
+        <div class="warn">Chequeá el enunciado exacto de tu parcial: si los pesos/valores difieren, aplicá la misma recurrencia. Lo que se corrige es que la tabla esté bien llenada y la reconstrucción sea coherente.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz">
+    <h2>🧠 Autoevaluación — 30 preguntas</h2>
+    <p>Tocá cada tarjeta para revelar la respuesta. Cubrí la respuesta y respondé en voz alta primero.</p>
+    <div id="flashcards"></div>
+  </section>
+
+  <!-- DIAGNÓSTICO -->
+  <section id="diagnostico">
+    <h2>🔍 Cómo identificar qué técnica usar</h2>
+    <p>El paso más importante del examen: leer el enunciado y darte cuenta <strong>qué técnica es</strong>. Ese diagnóstico correcto ya es medio ejercicio. Acá tenés las pistas.</p>
+
+    <h3>Preguntas clave (en orden — la primera que da "sí" gana)</h3>
+    <ol>
+      <li>¿Es un <strong>juego de 2 jugadores por turnos</strong> (alguien gana/pierde/empata)? → <strong>MinMax / poda α-β</strong> (UVA 7).</li>
+      <li>¿Piden <strong>explícitamente "Ramificación y Poda"</strong>, o es optimización exacta (máx/mín) con cotas y poda? → <strong>B&B</strong> (UVA 8).</li>
+      <li>¿Piden <strong>"todas las formas/soluciones posibles"</strong>, <strong>"dibujar el espacio de búsqueda"</strong> o <strong>"funciones hijos y poda"</strong>, o es un tablero con restricciones (reinas, flores)? → <strong>Backtracking</strong> (UVA 6).</li>
+      <li>¿Hay <strong>subproblemas que se repiten</strong>, una restricción tipo <strong>"no dos consecutivos"</strong>, <strong>subsecuencias</strong>, o <strong>mochila 0-1</strong>, y conviene una <strong>tabla</strong>? → <strong>Programación Dinámica</strong> (UVA 5).</li>
+      <li>¿Es un <strong>grafo</strong>: camino más corto <em>desde un origen</em>, o <em>conectar todo con mínimo costo sin ciclos</em>? → <strong>Greedy sobre grafos</strong> (UVA 4: Dijkstra / Kruskal / Prim). Si es "entre <strong>TODOS los pares</strong>" → <strong>Floyd</strong> (PD, UVA 5).</li>
+      <li>¿Es una <strong>decisión local que se justifica</strong> ("el mejor en cada paso"), compresión, o una mochila que <strong>se puede fraccionar</strong>? → <strong>Greedy</strong> (UVA 3).</li>
+      <li>¿Se <strong>divide en mitades</strong> para ordenar o buscar? → <strong>Divide y Conquista</strong> (UVA 2).</li>
+      <li>¿Piden la <strong>complejidad de una función recursiva</strong>? → <strong>UVA 1</strong>: identificá \(a, b, k\) y aplicá sustracción/división.</li>
+    </ol>
+
+    <h3>Tabla de señales</h3>
+    <table class="cmp">
+      <tr><th>Pistas en el enunciado</th><th>Técnica</th><th>Qué mostrar en la respuesta</th></tr>
+      <tr><td>"dos jugadores", "por turnos", "gana / pierde", "estrategia ganadora"</td><td><strong>MinMax</strong> (UVA 7)</td><td>Árbol de juego; valores que suben (Max = máx, Min = mín); poda α-β; \(\Theta(k^n)\)</td></tr>
+      <tr><td>"mochila / presupuesto / capacidad K", "maximizar valor/utilidad sin pasarse", "una sola vez / no fraccionar" <em>+ piden "Ramificación y Poda"</em></td><td><strong>B&B</strong> (UVA 8)</td><td>Árbol binario incluir/no-incluir; cotas (récord + techo); una poda justificada; \(O(2^n)\)</td></tr>
+      <tr><td>"todas las formas posibles", "dibuje el espacio de búsqueda", "funciones hijos y poda"; tablero/reinas/flores</td><td><strong>Backtracking</strong> (UVA 6)</td><td>Vector solución; árbol parcial; función de poda; \(O(\text{hijos}^{\text{niveles}})\)</td></tr>
+      <tr><td>"no dos consecutivos", "subsecuencia", "mínima cantidad de monedas/pasos", "objetos enteros", "tabla"</td><td><strong>Prog. Dinámica</strong> (UVA 5)</td><td>Subestructura óptima + superposición; recurrencia; casos base; tabla llenada; complejidad</td></tr>
+      <tr><td>"camino más corto desde un nodo origen"</td><td><strong>Dijkstra</strong> (UVA 4)</td><td>Criterio greedy (nodo pendiente más cercano); \(O(n^2)\); no sirve con pesos negativos</td></tr>
+      <tr><td>"conectar todas con el menor costo, sin ciclos", "red / tendido mínimo"</td><td><strong>MST: Kruskal / Prim</strong> (UVA 4)</td><td>Aristas por costo (Kruskal) o crecer un árbol (Prim); \(n-1\) aristas</td></tr>
+      <tr><td>"camino más corto entre <strong>todos</strong> los pares"</td><td><strong>Floyd</strong> (UVA 5, PD)</td><td>Matriz de costos; escala por nodo intermedio \(k\); \(\Theta(n^3)\)</td></tr>
+      <tr><td>"el mejor en cada paso", "compresión", mochila que <strong>se puede fraccionar</strong></td><td><strong>Greedy</strong> (UVA 3)</td><td>Criterio de selección; aclarar que hay que probar que es óptimo</td></tr>
+      <tr><td>"calcule la complejidad de esta función recursiva"</td><td><strong>Complejidad</strong> (UVA 1)</td><td>Identificar \(a, b, k\); tipo (sustracción/división); aplicar la fórmula</td></tr>
+    </table>
+
+    <h3>Ejemplos reales de examen (identificación)</h3>
+
+    <div class="ex">
+      <div class="q"><span class="tag">Enunciado 1 — Campamento</span><br>"Mochila con capacidad hasta K kilos. Cada objeto tiene peso y utilidad. Elegir qué llevar para <strong>no pasar del peso</strong> y que la <strong>utilidad total sea máxima</strong>. Cada objeto se lleva <strong>una sola vez</strong> (o no). Resolver con <strong>Ramificación y Poda</strong>."</div>
+      <button class="reveal-btn">¿Qué técnica es y cómo responder?</button>
+      <div class="answer">
+        <p><strong>Técnica: Ramificación y Poda — Mochila 0-1</strong> (UVA 8). Señales: mochila + capacidad + maximizar valor + <em>una sola vez / no fraccionar</em>, y encima lo <strong>piden explícitamente</strong>.</p>
+        <p><strong>Cómo responder:</strong> (a) árbol binario <em>incluir / no incluir</em> cada objeto, con la cota de cada nodo (récord \(lim\) + techo optimista fraccionando el próximo objeto; recordá el truco de valores en negativo para poder minimizar); (b) dar datos concretos y dibujar el árbol parcial con al menos una <strong>poda</strong>; (c) complejidad <strong>\(O(2^n)\)</strong>.</p>
+      </div>
+    </div>
+
+    <div class="ex">
+      <div class="q"><span class="tag">Enunciado 2 — Jardinero</span><br>"Tablero de \(n\times n\). Una <strong>flor en cada fila</strong>, pero <strong>no dos en la misma fila, columna ni diagonal</strong>. (a) Dibuje el espacio de búsqueda parcial. (b) Pseudocódigo que indique <strong>todas las formas posibles</strong>. (c) Detalle las <strong>funciones hijos y poda</strong>."</div>
+      <button class="reveal-btn">¿Qué técnica es y cómo responder?</button>
+      <div class="answer">
+        <p><strong>Técnica: Backtracking — N-Reinas disfrazado</strong> (UVA 6). Señales: tablero \(n\times n\), una por fila, restricción <em>fila/columna/diagonal</em>, "todas las formas posibles", "funciones hijos y poda". Es N-Reinas con otra historia.</p>
+        <p><strong>Cómo responder:</strong> representar con un <strong>vector de \(n\) posiciones</strong> (\(x[i]\) = columna de la flor en la fila \(i\)); árbol parcial probando columnas por fila; poda = chequear <strong>columna</strong> (\(c_i \neq c_j\)) y <strong>diagonal</strong> (\(|f_i-f_j| \neq |c_i-c_j|\)); complejidad <strong>\(O(n^n)\)</strong>.</p>
+      </div>
+    </div>
+
+    <div class="ex">
+      <div class="q"><span class="tag">Enunciado 3 — Multiple choice de grafos</span><br>Objetivo de Dijkstra · qué comparten Dijkstra y Prim · Dijkstra vs Floyd.</div>
+      <button class="reveal-btn">Ver respuestas</button>
+      <div class="answer">
+        <p><strong>Objetivo de Dijkstra:</strong> "calcular la ruta más corta desde un nodo origen a todos los demás" (no es MST, no detecta ciclos negativos).</p>
+        <p><strong>Dijkstra y Prim en común:</strong> "ambos usan una estrategia <strong>greedy</strong>" (Dijkstra elige el nodo más cercano; Prim la arista más barata — no usan DFS ni generan árboles binarios).</p>
+        <p><strong>Dijkstra vs Floyd:</strong> "Dijkstra encuentra caminos mínimos desde <strong>un origen</strong>; Floyd, entre <strong>todos los pares</strong>." (Dijkstra <em>no</em> funciona con negativos; no usan la misma estructura.)</p>
+      </div>
+    </div>
+
+    <div class="warn"><strong>Trampas frecuentes:</strong>
+      <div style="margin-top:6px">• <strong>Mochila:</strong> si dice "se puede <em>fraccionar</em>" → Greedy (UVA 3); si "objetos <em>enteros</em> / una sola vez" → PD (UVA 5) o B&B (UVA 8).</div>
+      <div>• <strong>Grafos:</strong> "desde un origen" → Dijkstra; "todos los pares" → Floyd; "conectar todo sin ciclos" → MST (Kruskal/Prim).</div>
+      <div>• <strong>Todas vs la mejor:</strong> "<em>todas</em> las soluciones" → Backtracking; "la <em>mejor</em> (óptima) con cota" → B&B.</div>
+      <div>• <strong>PD vs D&C:</strong> si los subproblemas se <em>repiten</em> (se solapan) → PD; si son independientes → Divide y Conquista.</div>
+    </div>
+  </section>
+
+  <!-- CHECKLIST -->
+  <section id="checklist">
+    <h2>✅ Checklist final de repaso</h2>
+    <p>Se guarda automáticamente en este navegador.</p>
+    <div class="check" id="check"></div>
+  </section>
+
+  <div class="foot">
+    Generado a partir de tus resúmenes por UVA, el Resumen General de la cátedra, la Guía Final Integradora, el Simulacro de Examen Final y el Parcial 8-Nov. · Programación III — UADE
+  </div>
+</main>
+</div>
+<a href="#inicio" class="top-link" title="Volver arriba">↑</a>
+
+<script>
+// Reveal answers
+document.querySelectorAll('.reveal-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const a=btn.nextElementSibling;
+    const open=a.classList.toggle('show');
+    btn.textContent = open ? 'Ocultar solución' : 'Ver solución';
+    if(open && window.renderMathInElement){ renderMathInElement(a, katexOpts); }
+  });
+});
+
+// Scrollspy nav
+const links=[...document.querySelectorAll('#nav a')];
+const secs=links.map(l=>document.querySelector(l.getAttribute('href'))).filter(Boolean);
+const spy=()=>{
+  let cur=secs[0];
+  const y=window.scrollY+120;
+  for(const s of secs){ if(s.offsetTop<=y) cur=s; }
+  links.forEach(l=>l.classList.toggle('active', l.getAttribute('href')==='#'+cur.id));
+};
+window.addEventListener('scroll',spy); spy();
+
+// Flashcards (respuestas con LaTeX)
+const cards=[
+ ["¿Qué se analiza normalmente en complejidad y por qué?","El peor caso, porque acota a todos los demás casos."],
+ ["Recurrencia de división: ¿fórmula si \\(a=b^k\\)?","\\(\\Theta(n^k\\log n)\\). Ej: \\(2T(n/2)+O(n)\\to\\Theta(n\\log n)\\)."],
+ ["Recurrencia de sustracción con \\(a\\gt 1\\), ¿qué da?","Exponencial: \\(\\Theta(a^{n/b})\\). Ej: \\(2T(n-1)+O(1)\\to\\Theta(2^n)\\)."],
+ ["Los 3 pasos de Divide y Conquista","Dividir, Conquistar (recursivo), Combinar. Subproblemas independientes."],
+ ["MergeSort vs QuickSort en peor caso","MergeSort \\(\\Theta(n\\log n)\\) siempre (usa memoria aux); QuickSort peor caso \\(\\Theta(n^2)\\)."],
+ ["Los 5 componentes de un Greedy","Candidatos, selección, factibilidad, solución, objetivo."],
+ ["¿Greedy resuelve la mochila 0-1?","No, solo la fraccionaria. La 0-1 va por PD o B&B."],
+ ["¿Por qué Dijkstra falla con pesos negativos?","Porque al marcar un nodo asume su distancia definitiva; un peso negativo posterior podría mejorarla."],
+ ["Kruskal vs Prim: ¿cuándo cada uno?","Kruskal (aristas, \\(\\Theta(a\\log a)\\)) en grafos dispersos; Prim (vértices, \\(O(n^2)\\)) en densos."],
+ ["¿Cuántas aristas tiene un MST de \\(n\\) vértices?","Siempre \\(n-1\\)."],
+ ["Las 2 condiciones para aplicar PD","Subestructura óptima + superposición de subproblemas."],
+ ["¿Qué es el principio de optimalidad?","Una solución es óptima solo si se construye sobre soluciones parciales óptimas."],
+ ["Recurrencia de la mochila 0-1 (PD)","\\(V[i][j]=\\max(V[i-1][j],\\, v_i+V[i-1][j-p_i])\\) si \\(p_i\\le j\\)."],
+ ["¿Por qué la mochila 0-1 es pseudo-polinomial?","Su tabla \\(O(o\\cdot p)\\) depende del valor de \\(p\\), no solo de la cantidad de objetos \\(n\\)."],
+ ["Complejidad general de Backtracking","\\(O(b^d)\\), exponencial. Las podas la hacen manejable."],
+ ["¿Qué técnica es DFS y qué estructura usa?","Backtracking; usa pila/recursión, va en profundidad."],
+ ["DFS en grafo dirigido: ¿por qué importa el nodo inicial?","Solo sigue aristas salientes; si el inicio no alcanza a todos, quedan nodos sin visitar (bosque de DFS)."],
+ ["DFS vs BFS: estructura y uso","DFS pila (profundidad); BFS cola FIFO (por niveles, camino mínimo en aristas)."],
+ ["Complejidad de suma de subconjuntos","\\(O(2^n)\\) — incluir/no incluir cada elemento."],
+ ["Definición de juego adversativo","2 jugadores, turnos alternados, información perfecta, sin azar; suma cero."],
+ ["Regla N/P","P si todos los sucesores son N; N si al menos un sucesor es P."],
+ ["MinMax: ¿qué hace Max y qué hace Min?","Max toma el máximo de sus hijos; Min el mínimo. Complejidad \\(\\Theta(k^n)\\)."],
+ ["¿Qué son \\(\\alpha\\) y \\(\\beta\\)?","\\(\\alpha\\) = mejor asegurado para Max (no decrece); \\(\\beta\\) = mejor asegurado para Min (no crece)."],
+ ["¿Cuándo se poda en \\(\\alpha\\text{-}\\beta\\)?","Cuando \\(\\alpha \\ge \\beta\\). No cambia el resultado."],
+ ["Beneficio de \\(\\alpha\\text{-}\\beta\\) en el mejor caso","Reduce \\(\\Theta(k^n)\\) a \\(\\Theta(k^{n/2})\\): el doble de profundidad al mismo costo."],
+ ["Fósforos (pierde quien saca el último): posiciones perdedoras","\\(n\\equiv 1\\pmod 4\\): 1,5,9,13… Con 121 (=4·30+1) no conviene jugar primero."],
+ ["Las 3 cantidades de B&B (récord / techo / piso)","lim = récord (mejor solución completa); techo = cota optimista de la rama (para podar y ordenar en LC-BB); piso = valor garantizado alcanzable (actualiza lim)."],
+ ["¿Cuándo se poda en B&B?","Cuando la estimación optimista (techo) de una rama ya es peor que el récord lim: es imposible que mejore lo que ya tenés."],
+ ["Las 3 variantes de B&B","FIFO-BB (cola), LIFO-BB (pila), LC-BB (cola de prioridad por costo, best-first, la más usada)."],
+ ["B&B vs Backtracking: diferencia clave","B&B expande el nodo más prometedor de toda la cola y poda por cota aunque sea factible; Backtracking va en profundidad y poda por infactibilidad."]
+];
+const fc=document.getElementById('flashcards');
+cards.forEach((c,i)=>{
+  const d=document.createElement('div');
+  d.className='flash';
+  d.innerHTML='<span class="hint">#'+(i+1)+' · tocar</span><div class="fq">'+c[0]+'</div><div class="fa">'+c[1]+'</div>';
+  d.addEventListener('click',()=>{
+    const opened=d.classList.toggle('open');
+    if(opened && window.renderMathInElement){ renderMathInElement(d.querySelector('.fa'), katexOpts); }
+  });
+  fc.appendChild(d);
+});
+
+// Checklist con persistencia
+const items=[
+ "Puedo resolver una recurrencia de sustracción o división identificando a,b,k a simple vista (UVA1).",
+ "Explico la diferencia entre D&C, Greedy, PD, Backtracking y B&B sin dudar.",
+ "Escribo de memoria el esquema de Backtracking y el de B&B (vivos, Poda, Expandir).",
+ "Armo un árbol MinMax y aplico poda α-β a mano en un juego con reglas nuevas.",
+ "Calculo cota superior e inferior en asignación/mochila y ramifico por LC-BB.",
+ "Hago DFS a mano en un grafo dirigido y explico por qué el nodo de inicio importa.",
+ "Planteo la recurrencia de un problema de PD nuevo y lleno la tabla a mano.",
+ "Repasé Dijkstra, Kruskal y Prim con un ejemplo numérico cada uno.",
+ "Resolví el Simulacro completo y el Parcial 8-Nov."
+];
+const cont=document.getElementById('check');
+let saved={};
+try{ saved=JSON.parse(localStorage.getItem('p3check')||'{}'); }catch(e){}
+const upd=()=>{
+  const n=Object.values(saved).filter(Boolean).length;
+  document.getElementById('progressMini').textContent='Checklist: '+n+' / '+items.length;
+};
+items.forEach((t,i)=>{
+  const l=document.createElement('label');
+  const chk=saved[i]?'checked':'';
+  l.innerHTML='<input type="checkbox" '+chk+'><span class="'+(saved[i]?'done':'')+'">'+t+'</span>';
+  const input=l.querySelector('input'), span=l.querySelector('span');
+  input.addEventListener('change',()=>{
+    saved[i]=input.checked; span.className=input.checked?'done':'';
+    try{ localStorage.setItem('p3check',JSON.stringify(saved)); }catch(e){}
+    upd();
+  });
+  cont.appendChild(l);
+});
+upd();
+
+// KaTeX render
+const katexOpts={
+  delimiters:[
+    {left:'\\[',right:'\\]',display:true},
+    {left:'\\(',right:'\\)',display:false}
+  ],
+  ignoredTags:['script','noscript','style','textarea','pre','code'],
+  throwOnError:false
+};
+window.addEventListener('DOMContentLoaded',()=>{
+  if(window.renderMathInElement){ renderMathInElement(document.body, katexOpts); }
+});
+</script>
+</body>
+</html>
